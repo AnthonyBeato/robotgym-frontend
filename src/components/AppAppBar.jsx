@@ -85,7 +85,7 @@ function AppAppBar({ mode, toggleColorMode }) {
                 color="info"
                 size="small"
                 component={Link}
-                to="/experimentos"
+                to="/experiments"
               >
                 Experimentos
               </Button>
@@ -94,7 +94,7 @@ function AppAppBar({ mode, toggleColorMode }) {
                 color="info"
                 size="small"
                 component={Link}
-                to="/documentacion"
+                to="/documentation"
               >
                 Documentación
               </Button>
@@ -154,7 +154,7 @@ function AppAppBar({ mode, toggleColorMode }) {
                 <MenuItem component={Link} to="/" onClick={toggleDrawer(false)}>
                   Inicio
                 </MenuItem>
-                <MenuItem component={Link} to="/experimentos" onClick={toggleDrawer(false)}>
+                <MenuItem component={Link} to="/experiments" onClick={toggleDrawer(false)}>
                   Experimentos
                 </MenuItem>
                 <MenuItem onClick={() => scrollToSection('highlights')}>

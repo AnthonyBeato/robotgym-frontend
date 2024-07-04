@@ -9,7 +9,9 @@ import {
 } from "react-router-dom"
 
 import ErrorPage from './error-page.jsx'
-import Experiment from './routes/experiment.jsx'
+import ExperimentPage from './routes/experimentPage.jsx'
+import CreateExperimentPage from './routes/experimentCreatePage.jsx'
+import EditExperimentPage from './routes/experimentEditPage.jsx'
 import HomePage from './routes/homePage.jsx'
 
 const router = createBrowserRouter([
@@ -23,14 +25,22 @@ const router = createBrowserRouter([
         element: <HomePage />
       },
       {
-        path: "experimentos",
-        element: <Experiment />,
+        path: "experiments",
+        element: <ExperimentPage />,
       },
       {
-        path: "documentacion",
+        path: "experiments/create-experiment",
+        element: <CreateExperimentPage />,
       },
       {
-        path: "contacto"
+        path: "experiments/edit-experiment/:id",
+        element: <EditExperimentPage />,
+      },
+      {
+        path: "documentation",
+      },
+      {
+        path: "contact"
       },
     ]
   },
