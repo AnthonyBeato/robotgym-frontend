@@ -52,7 +52,7 @@ const ExperimentList = () => {
     }));
 
     return (
-        <div style={{ height: 400, width: 600 }}>
+        <div style={{ height: 400, width: "100%" }}>
             <DataGrid
                 rows={rows}
                 columns={columns}

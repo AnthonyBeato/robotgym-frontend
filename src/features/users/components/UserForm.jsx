@@ -68,14 +68,32 @@ const UserForm = (props) => {
                         <TextField
                             id="txt-user-name"
                             name="username"
-                            placeholder='Nombre'
-                            aria-label='Nombre del experimento'
-                            value={formik.values.experimentName}
+                            placeholder='Nombre de usuario'
+                            aria-label='Nombre de usuario'
+                            value={formik.values.username}
                             onChange={formik.handleChange}
                             onBlur={formik.handleBlur}
-                            error={formik.touched.experimentName && Boolean(formik.errors.experimentName)}
-                            helperText={formik.touched.experimentName && formik.errors.experimentName}
+                            error={formik.touched.username && Boolean(formik.errors.username)}
+                            helperText={formik.touched.username && formik.errors.username}
                             fullWidth
+                            size='small'
+                            required
+                            variant="filled"
+                        />
+                    </Grid>
+                    <Grid xs={6}>
+                        <TextField
+                            id="txt-user-email"
+                            name="email"
+                            placeholder='Email de usuario'
+                            aria-label='Email de usuario'
+                            value={formik.values.email}
+                            onChange={formik.handleChange}
+                            onBlur={formik.handleBlur}
+                            error={formik.touched.email && Boolean(formik.errors.email)}
+                            helperText={formik.touched.email && formik.errors.email}
+                            fullWidth
+                            type="email"
                             size='small'
                             required
                             variant="filled"
@@ -83,41 +101,40 @@ const UserForm = (props) => {
                     </Grid>
                     <Grid xs={12}>
                         <TextField
-                            id="txt-experiment-description"
-                            name="description"
-                            placeholder='Descripción'
-                            value={formik.values.description}
+                            id="txt-user-password"
+                            name="password"
+                            placeholder='Contraseña'
+                            value={formik.values.password}
                             onChange={formik.handleChange}
                             onBlur={formik.handleBlur}
-                            error={formik.touched.description && Boolean(formik.errors.description)}
-                            helperText={formik.touched.description && formik.errors.description}
+                            error={formik.touched.password && Boolean(formik.errors.password)}
+                            helperText={formik.touched.password && formik.errors.password}
                             fullWidth
-                            multiline
-                            rows={6}
+                            type="password"
                             size='small'
                             variant="filled"
                         />
                     </Grid>
-                    <Grid xs={12}>
-                        <FormControl sx={{ m: 1, minWidth: 120 }}>
-                            <InputLabel id="select-cant-robots-label">Cant. Robots</InputLabel>
+                    <Grid xs={6}>
+                        <FormControl sx={{ minWidth: 120 }}>
+                            <InputLabel id="select-role-label">Rol</InputLabel>
                             <Select
-                                labelId="select-cant-robots-label"
-                                id="select-cant-robots"
-                                name="robotsQuantity"
-                                value={formik.values.robotsQuantity || 1}
+                                labelId="select-role-label"
+                                id="select-role"
+                                name="role"
+                                value={formik.values.role}
                                 variant='filled'
-                                label="Cant. Robots"
+                                label="Rol"
                                 required
                                 onChange={formik.handleChange}
                                 onBlur={formik.handleBlur}
-                                error={formik.touched.robotsQuantity && Boolean(formik.errors.robotsQuantity)}
+                                error={formik.touched.role && Boolean(formik.errors.role)}
                             >
-                                <MenuItem value={1}>1</MenuItem>
-                                <MenuItem value={2}>2</MenuItem>
-                                <MenuItem value={3}>3</MenuItem>
+                                <MenuItem value={"Estudiante"}>Estudiante</MenuItem>
+                                <MenuItem value={"Profesor"}>Profesor</MenuItem>
+                                <MenuItem value={"Administrador"}>Administrador</MenuItem>
                             </Select>
-                            <FormHelperText>Robots para experimento</FormHelperText>
+                            <FormHelperText>Rol de Usuario</FormHelperText>
                         </FormControl>
 
                     </Grid>

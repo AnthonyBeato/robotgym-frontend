@@ -3,32 +3,34 @@ import { useState } from "react"
 
 import UserForm from "./UserForm"
 
-const CreateExperiment = () => {
+const CreateUser = () => {
     const [formValues, setFormValues] = useState(
         {
-            experimentName: '',
-            description: '',
-            cantRobots: 1,
+            fullName: '',
+            username: '',
+            email: '',
+            password: '',
+            role: "Estudiante",
         }
     )
 
     const apiUrl = import.meta.env.VITE_HOST;
     // onSubmit handler
-    const onSubmit = (experimentObject) => {
-        const newExperiment = {
-            name: experimentObject.experimentName,
-            description: experimentObject.description,
-            robotsQuantity: experimentObject.robotsQuantity,
-            isActive: false,
-            user: "662671dd8879b712ea44ada2"
+    const onSubmit = (userObject) => {
+        const newUser = {
+            name: userObject.fullName,
+            username: userObject.username,
+            email: userObject.email,
+            password: userObject.password,
+            role: userObject.role,
         };
 
         axios.post(
-            apiUrl + '/experiments/create-experiment',
-            newExperiment)
+            apiUrl + '/users/create-user',
+            newUser)
             .then((res) => {
                 if (res.status === 201) {
-                    alert('Experimento creado exitosamente')
+                    alert('Usuario creado exitosamente')
                 }
                 else {
                     Promise.reject()
@@ -42,10 +44,10 @@ const CreateExperiment = () => {
             initialValues={formValues}
             onSubmit={onSubmit}
         >
-            Crear Experimento
+            Crear Usuario
         </UserForm>
     )
 
 }
 
-export default CreateExperiment;
+export default CreateUser;

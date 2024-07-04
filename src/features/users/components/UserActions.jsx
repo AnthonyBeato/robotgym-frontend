@@ -2,14 +2,14 @@ import { Link } from 'react-router-dom';
 import Button from '@mui/material/Button';
 import axios from 'axios';
 
-const ExperimentActions = ({ experimentId, onDelete }) => {
+const UsersActions = ({ userId, onDelete }) => {
     const apiUrl = import.meta.env.VITE_HOST;
 
-    const deleteExperiment = () => {
-        axios.delete(apiUrl + '/experiments/delete-experiment/' + experimentId)
+    const deleteUser = () => {
+        axios.delete(apiUrl + '/users/delete-user/' + userId)
             .then((res) => {
                 if (res.status === 200) {
-                    alert("Experimento borrado satisfactoriamente");
+                    alert("Usuario borrado satisfactoriamente");
                     onDelete();
                 } else {
                     Promise.reject();
@@ -25,14 +25,14 @@ const ExperimentActions = ({ experimentId, onDelete }) => {
                 color="info"
                 style={{ marginLeft: '10px' }}
                 component={Link}
-                to={`/experiments/edit-experiment/${experimentId}`}
+                to={`/users/edit-user/${userId}`}
             >
                 Editar
             </Button>
             <Button
                 variant="contained"
                 color="error"
-                onClick={deleteExperiment}
+                onClick={deleteUser}
                 style={{ marginLeft: '10px' }}
             >
                 Eliminar
@@ -41,4 +41,4 @@ const ExperimentActions = ({ experimentId, onDelete }) => {
     );
 }
 
-export default ExperimentActions;
+export default UsersActions;

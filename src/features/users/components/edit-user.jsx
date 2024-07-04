@@ -1,14 +1,16 @@
 import axios from "axios"
 import { useEffect, useState } from "react"
 import { useParams, useNavigate } from 'react-router-dom';
-import ExperimentForm from "./ExperimentForm"
+import UserForm from "./UserForm"
 
-const EditExperiment = () => {
+const EditUser = () => {
     const [formValues, setFormValues] = useState(
         {
-            experimentName: '',
-            description: '',
-            robotsQuantity: 1,
+            fullName: '',
+            username: '',
+            email: '',
+            password: '',
+            role: "Estudiante",
         }
     )
     const { id } = useParams();
@@ -16,20 +18,22 @@ const EditExperiment = () => {
     const apiUrl = import.meta.env.VITE_HOST;
 
     // onSubmit handler
-    const onSubmit = (experimentObject) => {
-        const updatedExperiment = {
-            name: experimentObject.experimentName,
-            description: experimentObject.description,
-            robotsQuantity: experimentObject.robotsQuantity,
+    const onSubmit = (userObject) => {
+        const updatedUser = {
+            name: userObject.fullName,
+            username: userObject.username,
+            email: userObject.email,
+            password: userObject.password,
+            role: userObject.role,
         }
 
         axios.put(
-            apiUrl + '/experiments/update-experiment/' + id, updatedExperiment
+            apiUrl + '/users/update-user/' + id, updatedUser
         )
             .then((res) => {
                 if (res.status === 200) {
-                    alert('Experimento editado exitosamente');
-                    navigate("/experiments");
+                    alert('Usuario editado exitosamente');
+                    navigate("/users");
                 } else
                     Promise.reject()
             })
@@ -39,19 +43,23 @@ const EditExperiment = () => {
     // Cargar data del server y reinicializar el form de student
     useEffect(() => {
         axios.get(
-            apiUrl + '/experiments/' + id
+            apiUrl + '/users/' + id
         )
             .then((res) => {
                 const {
                     name,
-                    description,
-                    robotsQuantity
+                    username,
+                    email,
+                    password,
+                    role
                 } = res.data;
                 setFormValues(
                     {
-                        experimentName: name,
-                        description,
-                        robotsQuantity
+                        fullName: name,
+                        username,
+                        email,
+                        password,
+                        role
                     }
                 );
             })
@@ -60,14 +68,14 @@ const EditExperiment = () => {
     }, [apiUrl, id]);
 
     return (
-        <ExperimentForm
+        <UserForm
             initialValues={formValues}
             onSubmit={onSubmit}
         >
-            Editar Experimento
-        </ExperimentForm>
+            Editar Usuario
+        </UserForm>
     )
 
 }
 
-export default EditExperiment;
+export default EditUser;
