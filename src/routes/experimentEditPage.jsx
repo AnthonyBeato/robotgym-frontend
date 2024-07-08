@@ -10,6 +10,15 @@ import EditExperiment from '../features/experiments/components/edit-experiment';
 
 
 function EditExperimentPage() {
+    const { token, loading } = useContext(AuthContext);
+    if (loading) {
+      return null;
+    }
+  
+    if (!token) {
+      return <Navigate to="/users/login" replace />;
+    }
+
     return (
         <>
             <GeneralPageStructure>

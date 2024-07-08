@@ -11,8 +11,20 @@ import Grid from '@mui/material/Unstable_Grid2';
 import Button from '@mui/material/Button';
 import { Link } from "react-router-dom";
 
+import { useContext } from "react"; 
+import { AuthContext } from '../context/AuthContext';
+import { Navigate } from "react-router-dom"; 
 
 function ExperimentPage() {
+    const { token, loading } = useContext(AuthContext);
+    if (loading) {
+      return null;
+    }
+  
+    if (!token) {
+      return <Navigate to="/users/login" replace />;
+    }
+
     return (
         <>
             <GeneralPageStructure>

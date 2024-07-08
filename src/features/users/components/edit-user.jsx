@@ -11,6 +11,7 @@ const EditUser = () => {
             email: '',
             password: '',
             role: "Estudiante",
+            aprobationStatus: 'Pendiente',
         }
     )
     const { id } = useParams();
@@ -25,6 +26,7 @@ const EditUser = () => {
             email: userObject.email,
             password: userObject.password,
             role: userObject.role,
+            aprobationStatus: userObject.aprobationStatus,
         }
 
         axios.put(
@@ -51,7 +53,8 @@ const EditUser = () => {
                     username,
                     email,
                     password,
-                    role
+                    role,
+                    aprobationStatus,
                 } = res.data;
                 setFormValues(
                     {
@@ -59,7 +62,8 @@ const EditUser = () => {
                         username,
                         email,
                         password,
-                        role
+                        role,
+                        aprobationStatus,
                     }
                 );
             })

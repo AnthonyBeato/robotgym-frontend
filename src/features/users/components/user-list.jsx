@@ -7,6 +7,7 @@ const columns = [
     { field: 'name', headerName: 'Nombre Completo', width: 200 },
     { field: 'username', headerName: 'User', width: 200 },
     { field: 'role', headerName: 'Rol', width: 200 },
+    { field: 'aprobationStatus', headerName: 'Estado', width: 200 },
     { field: 'email', headerName: 'Email', width: 200 },
     {
         field: 'action',
@@ -44,6 +45,7 @@ const UserList = () => {
         name: user.name,
         username: user.username,
         role: user.role,
+        aprobationStatus: user.aprobationStatus,
         email: user.email,
     }));
 

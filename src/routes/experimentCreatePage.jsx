@@ -10,6 +10,15 @@ import CreateExperiment from '../features/experiments/components/create-experime
 
 
 function CreateExperimentPage() {
+    const { token, loading } = useContext(AuthContext);
+    if (loading) {
+      return null;
+    }
+  
+    if (!token) {
+      return <Navigate to="/users/login" replace />;
+    }
+
     return (
         <>
             <GeneralPageStructure>

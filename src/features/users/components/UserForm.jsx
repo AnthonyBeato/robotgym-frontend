@@ -30,6 +30,9 @@ const validationSchema = yup.object({
     role: yup
         .string('Entra el rol')
         .required("Requerido"),
+    aprobationStatus: yup
+        .string('Entra el status de aprobación')
+        .required("Requerido"),
 });
 
 const UserForm = (props) => {
@@ -115,8 +118,8 @@ const UserForm = (props) => {
                             variant="filled"
                         />
                     </Grid>
-                    <Grid xs={6}>
-                        <FormControl sx={{ minWidth: 120 }}>
+                    <Grid xs={3}>
+                        <FormControl>
                             <InputLabel id="select-role-label">Rol</InputLabel>
                             <Select
                                 labelId="select-role-label"
@@ -139,6 +142,31 @@ const UserForm = (props) => {
 
                     </Grid>
 
+                    {props.isRegistering ? null : (
+                        <Grid xs={3} >
+                        <FormControl>
+                            <InputLabel id="select-status-label">Status</InputLabel>
+                            <Select
+                                labelId="select-status-label"
+                                id="select-status"
+                                name="aprobationStatus"
+                                value={formik.values.aprobationStatus}
+                                variant='filled'
+                                label="Status"
+                                required
+                                onChange={formik.handleChange}
+                                onBlur={formik.handleBlur}
+                                error={formik.touched.aprobationStatus && Boolean(formik.errors.aprobationStatus)}
+                            >
+                                <MenuItem value={"Aceptado"}>Aceptado</MenuItem>
+                                <MenuItem value={"Pendiente"}>Pendiente</MenuItem>
+                                <MenuItem value={"Rechazado"}>Rechazado</MenuItem>
+                            </Select>
+                            <FormHelperText>Status de aprobación del Usuario</FormHelperText>
+                        </FormControl>
+
+                    </Grid>
+                    )}
                     <Grid xs={12}>
                         <Button color="primary" variant="contained" fullWidth type="submit">
                             {props.children}

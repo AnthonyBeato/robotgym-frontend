@@ -16,6 +16,10 @@ import UserPage from './routes/userPage.jsx'
 import CreateUserPage from './routes/userCreatePage.jsx'
 import EditUserPage from './routes/userEditPage.jsx'
 import HomePage from './routes/homePage.jsx'
+import LoginPage from './routes/loginPage.jsx'
+import RegisterPage from './routes/registerPage.jsx'
+
+import { AuthProvider } from './context/AuthContext.jsx'
 
 const router = createBrowserRouter([
   {
@@ -40,16 +44,24 @@ const router = createBrowserRouter([
         element: <EditExperimentPage />,
       },
       {
-        path: "users",
+        path: "admin/users",
         element: <UserPage />,
       },
       {
-        path: "users/create-user",
-        element: <CreateUserPage />,
+        path: "admin/users/create-user",
+        element: <CreateUserPage  />,
       },
       {
-        path: "users/edit-user/:id",
+        path: "admin/users/edit-user/:id",
         element: <EditUserPage />,
+      },
+      {
+        path: "users/login",
+        element: <LoginPage />,
+      },
+      {
+        path: "users/register",
+        element: <RegisterPage />,
       },
       {
         path: "documentation",
@@ -63,6 +75,8 @@ const router = createBrowserRouter([
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <RouterProvider router={router} />
+    <AuthProvider>
+      <RouterProvider router={router} />
+    </AuthProvider>
   </React.StrictMode>,
 )

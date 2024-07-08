@@ -9,6 +9,15 @@ import Stack from '@mui/material/Stack';
 import EditUser from '../features/users/components/edit-user';
 
 function EditUserPage() {
+    const { token, loading } = useContext(AuthContext);
+    if (loading) {
+      return null;
+    }
+  
+    if (!token) {
+      return <Navigate to="/users/login" replace />;
+    }
+
     return (
         <>
             <GeneralPageStructure>

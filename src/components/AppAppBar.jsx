@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
 
 import Box from '@mui/material/Box';
@@ -8,18 +8,26 @@ import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import Container from '@mui/material/Container';
 import Divider from '@mui/material/Divider';
+import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import Drawer from '@mui/material/Drawer';
 import MenuIcon from '@mui/icons-material/Menu';
 import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
 import ToggleColorMode from './ToggleColorMode';
+import PersonIcon from '@mui/icons-material/Person';
 
 import RobotGym from './RobotGymIcon';
 
 import { Link } from "react-router-dom";
 
+import { AuthContext } from '../context/AuthContext';
+import { jwtDecode } from 'jwt-decode';
+
 function AppAppBar({ mode, toggleColorMode }) {
   const [open, setOpen] = React.useState(false);
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const { token, setToken } = useContext(AuthContext);
+
 
   const toggleDrawer = (newOpen) => () => {
     setOpen(newOpen);
@@ -38,6 +46,26 @@ function AppAppBar({ mode, toggleColorMode }) {
       setOpen(false);
     }
   };
+
+  const handleLogout = () => {
+    setToken(null);
+    localStorage.removeItem("token");
+    handleCloseMenu();
+  };
+
+  const handleOpenMenu = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleCloseMenu = () => {
+    setAnchorEl(null);
+  };
+
+  let username = '';
+  if (token) {
+    const decodedToken = jwtDecode(token);
+    username = decodedToken.username;
+  }
 
   return (
     <AppBar
@@ -68,7 +96,6 @@ function AppAppBar({ mode, toggleColorMode }) {
           })}
         >
           <Box sx={{ flexGrow: 1, display: 'flex', alignItems: 'center', px: 0 }}>
-            {/* <Sitemark /> */}
             <RobotGym />
             <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
               <Button
@@ -104,7 +131,7 @@ function AppAppBar({ mode, toggleColorMode }) {
                 size="small"
                 onClick={() => scrollToSection('pricing')}
               >
-                Pricing
+                Contacto
               </Button>
               <Button
                 variant="text"
@@ -125,12 +152,33 @@ function AppAppBar({ mode, toggleColorMode }) {
             }}
           >
             <ToggleColorMode mode={mode} toggleColorMode={toggleColorMode} />
-            <Button color="primary" variant="text" size="small">
-              Sign in
-            </Button>
-            <Button color="primary" variant="contained" size="small">
-              Sign up
-            </Button>
+            {token ? (
+              <>
+              <Button color="primary" variant="text" size="small" onClick={handleOpenMenu}>
+                  {username} 
+                </Button>
+                <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClick={handleCloseMenu}>
+                  <MenuItem onClick={handleLogout}>
+                  Cerrar Sesión
+                  </MenuItem>
+                </Menu>
+              </>
+            ) : (
+              <>
+                <Button color="primary" variant="text" size="small"
+                component={Link}
+                  to="/users/login"
+                >
+                  Iniciar Sesión
+                </Button>
+                <Button color="primary" variant="contained" size="small"
+                  component={Link}
+                    to="/users/register"
+                >
+                  Registrarse
+                </Button>
+              </>
+            )}
           </Box>
           <Box sx={{ display: { sm: 'flex', md: 'none' } }}>
             <IconButton aria-label="Menu button" onClick={toggleDrawer(true)}>

@@ -11,6 +11,15 @@ import { Link } from "react-router-dom";
 
 
 function UserPage() {
+    const { token, loading } = useContext(AuthContext);
+    if (loading) {
+      return null;
+    }
+  
+    if (!token) {
+      return <Navigate to="/users/login" replace />;
+    }
+
     return (
         <>
             <GeneralPageStructure>

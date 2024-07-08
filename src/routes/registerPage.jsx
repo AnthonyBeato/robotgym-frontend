@@ -8,16 +8,7 @@ import Stack from '@mui/material/Stack';
 
 import CreateUser from '../features/users/components/create-user';
 
-function CreateUserPage() {
-    const { token, loading } = useContext(AuthContext);
-    if (loading) {
-      return null;
-    }
-  
-    if (!token) {
-      return <Navigate to="/users/login" replace />;
-    }
-
+function RegisterPage() {
     return (
         <>
             <GeneralPageStructure>
@@ -28,8 +19,8 @@ function CreateUserPage() {
                 >
 
                     <Box sx={{ display: 'flex', flexWrap: 'wrap' }}>
-                        <h1>Crea un Usuario</h1>
-                        <CreateUser isRegistering={false} />
+                        <h1>Regístrate</h1>
+                        <CreateUser isRegistering={true} />
                     </Box>
 
 
@@ -44,4 +35,4 @@ function CreateUserPage() {
     )
 }
 
-export default CreateUserPage;
+export default RegisterPage;

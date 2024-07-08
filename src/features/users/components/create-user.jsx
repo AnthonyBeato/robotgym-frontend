@@ -3,7 +3,9 @@ import { useState } from "react"
 
 import UserForm from "./UserForm"
 
-const CreateUser = () => {
+const CreateUser = (props) => {
+    const isRegistering = props.isRegistering;
+
     const [formValues, setFormValues] = useState(
         {
             fullName: '',
@@ -11,6 +13,7 @@ const CreateUser = () => {
             email: '',
             password: '',
             role: "Estudiante",
+            aprobationStatus: isRegistering ? "Pendiente" : "Aceptado",
         }
     )
 
@@ -23,6 +26,7 @@ const CreateUser = () => {
             email: userObject.email,
             password: userObject.password,
             role: userObject.role,
+            aprobationStatus: userObject.aprobationStatus,
         };
 
         axios.post(
@@ -43,8 +47,9 @@ const CreateUser = () => {
         <UserForm
             initialValues={formValues}
             onSubmit={onSubmit}
+            isRegistering={isRegistering}
         >
-            Crear Usuario
+            {isRegistering ? "Registrarse" : "Crear Usuario"}
         </UserForm>
     )
 
