@@ -25,7 +25,7 @@ const UsersActions = ({ userId, onDelete }) => {
                 color="info"
                 style={{ marginLeft: '10px' }}
                 component={Link}
-                to={`/users/edit-user/${userId}`}
+                to={`/admin/users/edit-user/${userId}`}
             >
                 Editar
             </Button>

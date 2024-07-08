@@ -33,15 +33,28 @@ const ExperimentList = () => {
 
     // Cargar data del server y reinicializar el form de student
     useEffect(() => {
-        axios.get(
-            apiUrl + '/experiments/')
-            .then(({ data }) => {
+        const fetchExperiments = async () => {
+            const token = localStorage.getItem('token'); // Obtener el token JWT del almacenamiento local
+
+            if (!token) {
+                console.error('No se encontró el token JWT');
+                return;
+            }
+
+            try {
+                const { data } = await axios.get(apiUrl + '/experiments/', {
+                    headers: {
+                        'Authorization': `Bearer ${token}` // Agregar el token en el encabezado de la solicitud
+                    }
+                });
                 setExperiments(Array.isArray(data) ? data : []);
-            })
-            .catch(err => {
-                console.log(err)
+            } catch (error) {
+                console.log(error);
                 setExperiments([]);
-            });
+            }
+        };
+
+        fetchExperiments();
     }, [apiUrl]);
 
     const rows = experiments.map((experiment, index) => ({

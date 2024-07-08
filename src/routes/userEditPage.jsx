@@ -7,6 +7,9 @@ import GeneralPageStructure from '../components/GeneralPageStructure';
 import Stack from '@mui/material/Stack';
 
 import EditUser from '../features/users/components/edit-user';
+import { useContext } from "react"; 
+import { AuthContext } from '../context/AuthContext';
+import { Navigate } from "react-router-dom"; 
 
 function EditUserPage() {
     const { token, loading } = useContext(AuthContext);

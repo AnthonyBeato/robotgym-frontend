@@ -8,6 +8,9 @@ import Stack from '@mui/material/Stack';
 
 import EditExperiment from '../features/experiments/components/edit-experiment';
 
+import { useContext } from "react"; 
+import { AuthContext } from '../context/AuthContext';
+import { Navigate } from "react-router-dom"; 
 
 function EditExperimentPage() {
     const { token, loading } = useContext(AuthContext);

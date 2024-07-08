@@ -9,6 +9,9 @@ import UserList from '../features/users/components/user-list';
 import Button from '@mui/material/Button';
 import { Link } from "react-router-dom";
 
+import { useContext } from "react"; 
+import { AuthContext } from '../context/AuthContext';
+import { Navigate } from "react-router-dom"; 
 
 function UserPage() {
     const { token, loading } = useContext(AuthContext);
@@ -37,7 +40,7 @@ function UserPage() {
                             variant="contained"
                             color="primary"
                             component={Link}
-                            to="/users/create-user"
+                            to="/admin/users/create-user"
                         >
                             Crear
                         </Button>

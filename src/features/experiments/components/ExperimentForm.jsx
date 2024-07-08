@@ -31,7 +31,10 @@ const ExperimentForm = (props) => {
     const formik = useFormik({
         initialValues: props.initialValues,
         validationSchema: validationSchema,
-        onSubmit: props.onSubmit,
+        onSubmit: (values, { resetForm }) => {
+            props.onSubmit(values);
+            resetForm();
+        },
     });
 
     useEffect(() => {
