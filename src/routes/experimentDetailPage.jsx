@@ -15,7 +15,7 @@ import { useContext } from "react";
 import { AuthContext } from '../context/AuthContext';
 import { Navigate } from "react-router-dom"; 
 
-function ExperimentPage() {
+function ExperimentDetailPage() {
     const { token, loading } = useContext(AuthContext);
     if (loading) {
       return null;
@@ -47,10 +47,7 @@ function ExperimentPage() {
                             Crear
                         </Button>
 
-                        <div style={{ height: 400, width: "100%" }}>
-                            <ExperimentList />
-                        </div>
-                        
+                        <ExperimentList />
                     </Box>
 
                 </Stack>
@@ -64,4 +61,4 @@ function ExperimentPage() {
     )
 }
 
-export default ExperimentPage;
+export default ExperimentDetailPage;

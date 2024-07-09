@@ -48,7 +48,7 @@ const CreateExperiment = () => {
 
         axios.post(apiUrl + '/experiments/create-experiment', newExperiment, {
             headers: {
-                'Authorization': `Bearer ${token}` // Agregar el token en el encabezado de la solicitud
+                'Authorization': `Bearer ${token}`
             }
         })
             .then((res) => {

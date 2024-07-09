@@ -3,6 +3,8 @@ import { useEffect, useState } from "react"
 import { useParams, useNavigate } from 'react-router-dom';
 import ExperimentForm from "./ExperimentForm"
 
+import { jwtDecode } from 'jwt-decode';
+
 const EditExperiment = () => {
     const [formValues, setFormValues] = useState(
         {
@@ -15,6 +17,25 @@ const EditExperiment = () => {
     const navigate = useNavigate();
     const apiUrl = import.meta.env.VITE_HOST;
 
+    // Función para obtener el ID del usuario del token JWT
+    const getUserIdFromToken = () => {
+        const token = localStorage.getItem('token'); // Asumiendo que guardaste el token en el localStorage
+        if (token) {
+            const decodedToken = jwtDecode(token);
+            return decodedToken.userId;
+        }
+        return null;
+    }
+
+    const userId = getUserIdFromToken();
+
+    if (!userId) {
+        alert('No se ha encontrado el usuario autenticado');
+        return;
+    }
+
+    const token = localStorage.getItem('token');
+
     // onSubmit handler
     const onSubmit = (experimentObject) => {
         const updatedExperiment = {
@@ -24,7 +45,11 @@ const EditExperiment = () => {
         }
 
         axios.put(
-            apiUrl + '/experiments/update-experiment/' + id, updatedExperiment
+            apiUrl + '/experiments/update-experiment/' + id, updatedExperiment, {
+                headers: {
+                    'Authorization': `Bearer ${token}` 
+                }
+            }
         )
             .then((res) => {
                 if (res.status === 200) {
@@ -39,7 +64,11 @@ const EditExperiment = () => {
     // Cargar data del server y reinicializar el form de student
     useEffect(() => {
         axios.get(
-            apiUrl + '/experiments/' + id
+            apiUrl + '/experiments/' + id, {
+                headers: {
+                    'Authorization': `Bearer ${token}` 
+                }
+            }
         )
             .then((res) => {
                 const {

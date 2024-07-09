@@ -13,6 +13,23 @@ import Select from '@mui/material/Select';
 
 import { useEffect } from "react";
 
+import axios from 'axios';
+
+const getAvailableRobots = async () => {
+    const apiUrl = import.meta.env.VITE_HOST;
+    const token = localStorage.getItem('token');
+    try {
+        const response = await axios.get(apiUrl + '/robots', {
+            headers: {
+                'Authorization': `Bearer ${token}` 
+            }
+        });
+        return response.data;
+    } catch (error) {
+        console.error('Error fetching robots:', error);
+        return [];
+    }
+};
 
 const validationSchema = yup.object({
     experimentName: yup
@@ -28,6 +45,8 @@ const validationSchema = yup.object({
 });
 
 const ExperimentForm = (props) => {
+    const [availableRobots, setAvailableRobots] = useState([]);
+
     const formik = useFormik({
         initialValues: props.initialValues,
         validationSchema: validationSchema,
@@ -40,6 +59,14 @@ const ExperimentForm = (props) => {
     useEffect(() => {
         formik.setValues(props.initialValues);
     }, [props.initialValues]);
+
+    useEffect(() => {
+        const fetchRobots = async () => {
+            const robots = await getAvailableRobots();
+            setAvailableRobots(robots);
+        };
+        fetchRobots();
+    }, []);
 
     return (
         <div>
@@ -94,9 +121,9 @@ const ExperimentForm = (props) => {
                                 onBlur={formik.handleBlur}
                                 error={formik.touched.robotsQuantity && Boolean(formik.errors.robotsQuantity)}
                             >
-                                <MenuItem value={1}>1</MenuItem>
-                                <MenuItem value={2}>2</MenuItem>
-                                <MenuItem value={3}>3</MenuItem>
+                                {availableRobots.map((robot, index) => (
+                                    <MenuItem key={robot._id} value={index + 1}>{index + 1}</MenuItem>
+                                ))}
                             </Select>
                             <FormHelperText>Robots para experimento</FormHelperText>
                         </FormControl>

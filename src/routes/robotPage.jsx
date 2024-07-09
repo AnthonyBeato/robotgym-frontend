@@ -6,7 +6,6 @@ import Footer from '../components/Footer';
 import GeneralPageStructure from '../components/GeneralPageStructure';
 import Stack from '@mui/material/Stack';
 import CreateExperiment from '../features/experiments/components/create-experiment';
-import ExperimentList from '../features/experiments/components/experiment-list';
 import Grid from '@mui/material/Unstable_Grid2';
 import Button from '@mui/material/Button';
 import { Link } from "react-router-dom";
@@ -14,8 +13,9 @@ import { Link } from "react-router-dom";
 import { useContext } from "react"; 
 import { AuthContext } from '../context/AuthContext';
 import { Navigate } from "react-router-dom"; 
+import RobotList from '../features/robots/components/robot-list';
 
-function ExperimentPage() {
+function RobotPage() {
     const { token, loading } = useContext(AuthContext);
     if (loading) {
       return null;
@@ -33,8 +33,7 @@ function ExperimentPage() {
                     useFlexGap
                     sx={{ alignItems: 'center', width: { xs: '100%', sm: '70%' } }}
                 >
-                    <h1>Experimentos</h1>
-
+                    <h1>Robots</h1>
 
                     <Box sx={{ display: 'flex', flexWrap: 'wrap'}}>
 
@@ -42,13 +41,13 @@ function ExperimentPage() {
                             variant="contained"
                             color="primary"
                             component={Link}
-                            to="/experiments/create-experiment"
+                            to="/robots/create-robot"
                         >
                             Crear
                         </Button>
 
                         <div style={{ height: 400, width: "100%" }}>
-                            <ExperimentList />
+                            <RobotList />
                         </div>
                         
                     </Box>
@@ -64,4 +63,4 @@ function ExperimentPage() {
     )
 }
 
-export default ExperimentPage;
+export default RobotPage;

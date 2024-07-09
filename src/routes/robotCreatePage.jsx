@@ -5,17 +5,13 @@ import Divider from '@mui/material/Divider';
 import Footer from '../components/Footer';
 import GeneralPageStructure from '../components/GeneralPageStructure';
 import Stack from '@mui/material/Stack';
-import CreateExperiment from '../features/experiments/components/create-experiment';
-import ExperimentList from '../features/experiments/components/experiment-list';
-import Grid from '@mui/material/Unstable_Grid2';
-import Button from '@mui/material/Button';
-import { Link } from "react-router-dom";
 
 import { useContext } from "react"; 
 import { AuthContext } from '../context/AuthContext';
 import { Navigate } from "react-router-dom"; 
+import CreateRobot from '../features/robots/components/create-robot';
 
-function ExperimentPage() {
+function CreateRobotPage() {
     const { token, loading } = useContext(AuthContext);
     if (loading) {
       return null;
@@ -33,25 +29,12 @@ function ExperimentPage() {
                     useFlexGap
                     sx={{ alignItems: 'center', width: { xs: '100%', sm: '70%' } }}
                 >
-                    <h1>Experimentos</h1>
 
-
-                    <Box sx={{ display: 'flex', flexWrap: 'wrap'}}>
-
-                        <Button
-                            variant="contained"
-                            color="primary"
-                            component={Link}
-                            to="/experiments/create-experiment"
-                        >
-                            Crear
-                        </Button>
-
-                        <div style={{ height: 400, width: "100%" }}>
-                            <ExperimentList />
-                        </div>
-                        
+                    <Box sx={{ display: 'flex', flexWrap: 'wrap' }}>
+                        <h1>Crea un Robot</h1>
                     </Box>
+                    <CreateRobot />
+
 
                 </Stack>
             </GeneralPageStructure>
@@ -64,4 +47,4 @@ function ExperimentPage() {
     )
 }
 
-export default ExperimentPage;
+export default CreateRobotPage;

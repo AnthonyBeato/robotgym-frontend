@@ -20,6 +20,9 @@ import LoginPage from './routes/loginPage.jsx'
 import RegisterPage from './routes/registerPage.jsx'
 
 import { AuthProvider } from './context/AuthContext.jsx'
+import RobotPage from './routes/robotPage.jsx'
+import CreateRobotPage from './routes/robotCreatePage.jsx'
+import EditRobotPage from './routes/robotEditPage.jsx'
 
 const router = createBrowserRouter([
   {
@@ -42,6 +45,18 @@ const router = createBrowserRouter([
       {
         path: "experiments/edit-experiment/:id",
         element: <EditExperimentPage />,
+      },
+      {
+        path: "robots",
+        element: <RobotPage />,
+      },
+      {
+        path: "robots/create-robot",
+        element: <CreateRobotPage />,
+      },
+      {
+        path: "robots/edit-robot/:id",
+        element: <EditRobotPage />,
       },
       {
         path: "admin/users",
