@@ -10,7 +10,6 @@ const CreateExperiment = () => {
         {
             experimentName: '',
             description: '',
-            cantRobots: 1,
         }
     )
 
@@ -39,7 +38,6 @@ const CreateExperiment = () => {
         const newExperiment = {
             name: experimentObject.experimentName,
             description: experimentObject.description,
-            robotsQuantity: experimentObject.robotsQuantity,
             isActive: false,
             user: userId,
         };

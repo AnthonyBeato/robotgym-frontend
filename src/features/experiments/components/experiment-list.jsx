@@ -4,6 +4,7 @@ import { DataGrid } from '@mui/x-data-grid';
 import ExperimentActions from './ExperimentActions';
 import { Link } from 'react-router-dom';
 import Button from '@mui/material/Button';
+import { jwtDecode } from 'jwt-decode';
 
 
 const columns = [
@@ -15,12 +16,6 @@ const columns = [
             >{params.row.name}</Button>
     )},
     { field: 'description', headerName: 'Descripción', width: 400 },
-    {
-        field: 'robotsQuantity',
-        headerName: 'Cant. Robots',
-        type: 'number',
-        width: 90,
-    },
     {
         field: 'action',
         headerName: 'Acción',
@@ -41,6 +36,23 @@ const ExperimentList = () => {
 
     const apiUrl = import.meta.env.VITE_HOST;
 
+    // Función para obtener el ID del usuario del token JWT
+    const getUserIdFromToken = () => {
+        const token = localStorage.getItem('token'); // Asumiendo que guardaste el token en el localStorage
+        if (token) {
+            const decodedToken = jwtDecode(token);
+            return decodedToken.userId;
+        }
+        return null;
+    }
+
+    const userId = getUserIdFromToken();
+
+    if (!userId) {
+        alert('No se ha encontrado el usuario autenticado');
+        return;
+    }
+
     // Cargar data del server y reinicializar el form de student
     useEffect(() => {
         const fetchExperiments = async () => {
@@ -52,7 +64,7 @@ const ExperimentList = () => {
             }
 
             try {
-                const { data } = await axios.get(apiUrl + '/experiments/', {
+                const { data } = await axios.get(apiUrl + '/experiments/user/' + userId, {
                     headers: {
                         'Authorization': `Bearer ${token}` 
                     }
@@ -71,7 +83,6 @@ const ExperimentList = () => {
         id: experiment._id,
         name: experiment.name,
         description: experiment.description,
-        robotsQuantity: experiment.robotsQuantity,
     }));
 
     return (

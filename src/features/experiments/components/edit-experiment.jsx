@@ -10,7 +10,6 @@ const EditExperiment = () => {
         {
             experimentName: '',
             description: '',
-            robotsQuantity: 1,
         }
     )
     const { id } = useParams();
@@ -41,7 +40,6 @@ const EditExperiment = () => {
         const updatedExperiment = {
             name: experimentObject.experimentName,
             description: experimentObject.description,
-            robotsQuantity: experimentObject.robotsQuantity,
         }
 
         axios.put(
@@ -74,13 +72,11 @@ const EditExperiment = () => {
                 const {
                     name,
                     description,
-                    robotsQuantity
                 } = res.data;
                 setFormValues(
                     {
                         experimentName: name,
                         description,
-                        robotsQuantity
                     }
                 );
             })

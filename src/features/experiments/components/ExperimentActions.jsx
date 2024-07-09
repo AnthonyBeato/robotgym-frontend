@@ -3,23 +3,60 @@ import Button from '@mui/material/Button';
 import axios from 'axios';
 import { jwtDecode } from 'jwt-decode';
 
-import * as React from 'react';
+import React, { useState, useEffect } from 'react';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import Slide from '@mui/material/Slide';
+import FormControl from '@mui/material/FormControl';
+import FormHelperText from '@mui/material/FormHelperText';
+import InputLabel from '@mui/material/InputLabel';
+import Select from '@mui/material/Select';
+import MenuItem from '@mui/material/MenuItem';
+import Box from '@mui/material/Box';
+
 
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
-  });
-  
+});
 
+const getAvailableRobots = async () => {
+    const apiUrl = import.meta.env.VITE_HOST;
+    const token = localStorage.getItem('token');
+    try {
+        const response = await axios.get(apiUrl + '/robots', {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
+        return response.data;
+    } catch (error) {
+        console.error('Error fetching robots:', error);
+        return [];
+    }
+};
 const ExperimentActions = ({ experimentId, experimentName, cantRobots, onDelete }) => {
     const apiUrl = import.meta.env.VITE_HOST;
 
+    const [availableRobots, setAvailableRobots] = useState([]);
+    const [robotsQuantity, setRobotsQuantity] = useState(1);
+    const [robotsOptions, setRobotsOptions] = useState([]);
     const [open, setOpen] = React.useState(false);
+
+    useEffect(() => {
+        const fetchRobots = async () => {
+            const robots = await getAvailableRobots();
+            setAvailableRobots(robots);
+            const options = Array.from({ length: robots.length }, (_, i) => i + 1);
+            setRobotsOptions(options);
+            if (options.length > 0) {
+                setRobotsQuantity(options[0]);
+            }
+        };
+        fetchRobots();
+    }, []);
 
     const handleClickOpen = () => {
       setOpen(true);
@@ -31,7 +68,7 @@ const ExperimentActions = ({ experimentId, experimentName, cantRobots, onDelete 
 
     // Función para obtener el ID del usuario del token JWT
     const getUserIdFromToken = () => {
-        const token = localStorage.getItem('token'); // Asumiendo que guardaste el token en el localStorage
+        const token = localStorage.getItem('token'); 
         if (token) {
             const decodedToken = jwtDecode(token);
             return decodedToken.userId;
@@ -68,7 +105,7 @@ const ExperimentActions = ({ experimentId, experimentName, cantRobots, onDelete 
 
     // Iniciar un experimento 
     const startExperiment = () => {
-        axios.post(apiUrl + '/experiments/start-experiment/' + experimentId, {
+        axios.post(apiUrl + '/experiments/start-experiment/' + experimentId, { robotsQuantity }, {
             headers: {
                 'Authorization': `Bearer ${token}` 
             }
@@ -101,11 +138,31 @@ const ExperimentActions = ({ experimentId, experimentName, cantRobots, onDelete 
                 onClose={handleClose}
                 aria-describedby="alert-dialog-start-experiment"
             >
-                <DialogTitle>¿Estas seguro de iniciar el proyecto: <b>{experimentName}</b> ?</DialogTitle>
+                <DialogTitle>Iniciando proyecto: <b>{experimentName}</b></DialogTitle>
                 <DialogContent>
-                    <DialogContentText id="alert-dialog-start-experiment">
-                        Su experimento usará {cantRobots} robots
+                    <DialogContentText id="alert-dialog-start-experiment" >
+                        Selecciona la cantidad de robots que deseas usar:
                     </DialogContentText>
+                    <Box mt={2}>
+                    {robotsOptions.length > 0 ? (
+                        <FormControl fullWidth>
+                            <InputLabel id="select-robots-quantity-label"></InputLabel>
+                            <Select
+                                labelId="select-robots-quantity-label"
+                                id="select-robots-quantity"
+                                value={robotsQuantity}
+                                onChange={(e) => setRobotsQuantity(e.target.value)}
+                            >
+                                {robotsOptions.map(option => (
+                                    <MenuItem key={option} value={option}>{option}</MenuItem>
+                                ))}
+                            </Select>
+                            <FormHelperText>Robots disponibles para el experimento</FormHelperText>
+                        </FormControl>
+                    ) : (
+                        <DialogContentText>No hay robots disponibles en este momento.</DialogContentText>
+                    )}
+                    </Box>
                 </DialogContent>
                 <DialogActions>
                     <Button variant='outlined' onClick={handleClose}>Cancelar</Button>
