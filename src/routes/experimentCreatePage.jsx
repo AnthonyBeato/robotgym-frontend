@@ -33,8 +33,10 @@ function CreateExperimentPage() {
 
                     <Box sx={{ display: 'flex', flexWrap: 'wrap' }}>
                         <h1>Crea tu Experimento</h1>
-                        <CreateExperiment />
                     </Box>
+
+                    <CreateExperiment />
+
 
 
                 </Stack>

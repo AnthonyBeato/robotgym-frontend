@@ -128,7 +128,8 @@ function AppAppBar({ mode, toggleColorMode }) {
                 variant="text"
                 color="info"
                 size="small"
-                onClick={() => scrollToSection('pricing')}
+                component={Link}
+                to="/contact"
               >
                 Contacto
               </Button>
@@ -136,10 +137,19 @@ function AppAppBar({ mode, toggleColorMode }) {
                 variant="text"
                 color="info"
                 size="small"
-                onClick={() => scrollToSection('faq')}
-                sx={{ minWidth: 0 }}
+                component={Link}
+                to="/admin/users"
               >
-                FAQ
+                Usuarios
+              </Button>
+              <Button
+                variant="text"
+                color="info"
+                size="small"
+                component={Link}
+                to="/robots"
+              >
+                Robots
               </Button>
             </Box>
           </Box>

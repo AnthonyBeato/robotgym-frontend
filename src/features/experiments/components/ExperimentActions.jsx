@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Button from '@mui/material/Button';
 import axios from 'axios';
 import { jwtDecode } from 'jwt-decode';
@@ -37,8 +37,9 @@ const getAvailableRobots = async () => {
         return [];
     }
 };
-const ExperimentActions = ({ experimentId, experimentName, cantRobots, onDelete }) => {
+const ExperimentActions = ({ experimentId, experimentName, onDelete, isActive }) => {
     const apiUrl = import.meta.env.VITE_HOST;
+    const navigate = useNavigate();
 
     const [availableRobots, setAvailableRobots] = useState([]);
     const [robotsQuantity, setRobotsQuantity] = useState(1);
@@ -114,6 +115,7 @@ const ExperimentActions = ({ experimentId, experimentName, cantRobots, onDelete 
                 if (res.status === 200) {
                     // Iniciando experimento
                     // Redireccionar a la pantalla de experimento iniciado
+                    navigate(`/experiments/${experimentId}/manual-control`, {state: {robotsQuantity} });
                 } else {
                     Promise.reject();
                 }
@@ -121,16 +123,36 @@ const ExperimentActions = ({ experimentId, experimentName, cantRobots, onDelete 
             .catch((err) => alert("Algo ha salido mal"));
     }
 
+    //  Retomar un experimento no desactivado
+    const retakeExperiment = () => {
+        axios.post(apiUrl + '/experiments/start-experiment/' + experimentId, { robotsQuantity }, {
+            headers: {
+                'Authorization': `Bearer ${token}` 
+            }
+        })
+    }
+
     return (
         <div>
-            <Button
-                variant="outlined"
-                color="info"
+            {isActive ? (
+                <Button
+                 variant="contained"
+                 color="primary"
+                 style={{ marginLeft: '10px' }}
+                 onClick={retakeExperiment}
+                >
+                    Retomar
+                </Button>
+            ) : (
+                <Button
+                variant="contained"
+                color="primary"
                 style={{ marginLeft: '10px' }}
                 onClick={handleClickOpen}
-            >
-                Iniciar
-            </Button>
+                >
+                    Iniciar
+                </Button>
+            )}
             <Dialog
                 open={open}
                 TransitionComponent={Transition}

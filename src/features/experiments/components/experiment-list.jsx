@@ -12,10 +12,11 @@ const columns = [
         renderCell: (params) => (
             <Button 
                 component={Link}
-                to={`/experiments/${params.row.id}`}
+                to={`/experiments/${params.row.id}/manual-control`}
             >{params.row.name}</Button>
     )},
     { field: 'description', headerName: 'Descripción', width: 400 },
+    { field: 'status', headerName: 'Estado', width: 200 },
     {
         field: 'action',
         headerName: 'Acción',
@@ -26,6 +27,7 @@ const columns = [
                 experimentName={params.row.name}
                 cantRobots={params.row.robotsQuantity}
                 onDelete={() => handleDelete(params.row.id)}
+                isActive={params.row.isActive}
             />
         )
     },
@@ -83,6 +85,7 @@ const ExperimentList = () => {
         id: experiment._id,
         name: experiment.name,
         description: experiment.description,
+        status: experiment.isActive ? 'Activo' : 'Inactivo',
     }));
 
     return (
