@@ -1,4 +1,3 @@
-import React from "react";
 import * as yup from "yup";
 import { useFormik } from 'formik';
 import { TextField } from '@mui/material';
@@ -11,7 +10,8 @@ import MenuItem from '@mui/material/MenuItem';
 import FormHelperText from '@mui/material/FormHelperText';
 import Select from '@mui/material/Select';
 
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
+import PropTypes from 'prop-types'; // ES6
 
 
 const validationSchema = yup.object({
@@ -34,8 +34,15 @@ const RobotForm = (props) => {
         },
     });
 
+    const initialRender = useRef(true);
+
     useEffect(() => {
-        formik.setValues(props.initialValues);
+        if (initialRender.current) {
+            initialRender.current = false;
+        } else {
+            formik.setValues(props.initialValues);
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [props.initialValues]);
 
 
@@ -94,5 +101,15 @@ const RobotForm = (props) => {
         </div>
     )
 }
+
+RobotForm.propTypes = {
+    initialValues: PropTypes.shape({
+        model: PropTypes.string.isRequired,
+        statusUse: PropTypes.string.isRequired,
+    }).isRequired,
+    onSubmit: PropTypes.func.isRequired,
+    children: PropTypes.node.isRequired,
+};
+
 
 export default RobotForm;

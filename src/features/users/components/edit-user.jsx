@@ -9,7 +9,6 @@ const EditUser = () => {
             fullName: '',
             username: '',
             email: '',
-            password: '',
             role: "Estudiante",
             aprobationStatus: 'Pendiente',
         }
@@ -17,35 +16,45 @@ const EditUser = () => {
     const { id } = useParams();
     const navigate = useNavigate();
     const apiUrl = import.meta.env.VITE_HOST;
+    const token = localStorage.getItem('token');
 
+    
     // onSubmit handler
     const onSubmit = (userObject) => {
         const updatedUser = {
             name: userObject.fullName,
             username: userObject.username,
             email: userObject.email,
-            password: userObject.password,
             role: userObject.role,
             aprobationStatus: userObject.aprobationStatus,
         }
 
         axios.put(
-            apiUrl + '/users/update-user/' + id, updatedUser
+            apiUrl + '/users/update-user/' + id, updatedUser, {
+                headers: {
+                    'Authorization': `Bearer ${token}` 
+                }
+            }
         )
             .then((res) => {
                 if (res.status === 200) {
                     alert('Usuario editado exitosamente');
-                    navigate("/users");
+                    navigate("/admin/users");
                 } else
                     Promise.reject()
             })
-            .catch(err => alert('Algo ha salido mal'))
+            .catch((error) => alert("Algo ha salido mal: " + error.message));
     }
 
+    
     // Cargar data del server y reinicializar el form de student
     useEffect(() => {
         axios.get(
-            apiUrl + '/users/' + id
+            apiUrl + '/users/' + id, {
+                headers: {
+                    'Authorization': `Bearer ${token}` 
+                }
+            }
         )
             .then((res) => {
                 const {
@@ -69,7 +78,8 @@ const EditUser = () => {
             })
             .catch(err => console.log(err)
             );
-    }, [apiUrl, id]);
+    }, [apiUrl, id, token]);
+
 
     return (
         <UserForm

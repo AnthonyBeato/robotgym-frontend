@@ -1,21 +1,12 @@
 import { Link } from 'react-router-dom';
 import Button from '@mui/material/Button';
 import axios from 'axios';
+import PropTypes from 'prop-types'; // ES6
 
-import * as React from 'react';
 
-const RobotActions = ({ robotId , onDelete }) => {
+const RobotActions = ({ robotId, onDelete }) => {
     const apiUrl = import.meta.env.VITE_HOST;
 
-    const [open, setOpen] = React.useState(false);
-
-    const handleClickOpen = () => {
-      setOpen(true);
-    };
-  
-    const handleClose = () => {
-      setOpen(false);
-    };
 
     const token = localStorage.getItem('token');
 
@@ -29,12 +20,12 @@ const RobotActions = ({ robotId , onDelete }) => {
             .then((res) => {
                 if (res.status === 200) {
                     alert("Robot borrado satisfactoriamente");
-                    onDelete();
+                    onDelete(robotId);
                 } else {
                     Promise.reject();
                 }
             })
-            .catch((err) => alert("Algo ha salido mal"));
+            .catch((error) => alert("Algo ha salido mal: " + error.message));
     }
 
     return (
@@ -58,6 +49,11 @@ const RobotActions = ({ robotId , onDelete }) => {
             </Button>
         </div>
     );
+}
+
+RobotActions.propTypes = {
+    robotId: PropTypes.string.isRequired,
+    onDelete: PropTypes.func.isRequired
 }
 
 export default RobotActions;

@@ -37,7 +37,7 @@ const EditRobot = () => {
                 } else
                     Promise.reject()
             })
-            .catch(err => alert('Algo ha salido mal'))
+            .catch((error) => alert("Algo ha salido mal: " + error.message));
     }
 
     // Cargar data del server y reinicializar el form de student
@@ -63,7 +63,7 @@ const EditRobot = () => {
             })
             .catch(err => console.log(err)
             );
-    }, [apiUrl, id]);
+    }, [apiUrl, id, token]);
 
     return (
         <RobotForm

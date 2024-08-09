@@ -6,33 +6,6 @@ import { Link } from 'react-router-dom';
 import Button from '@mui/material/Button';
 import { jwtDecode } from 'jwt-decode';
 
-
-const columns = [
-    { field: 'name', headerName: 'Nombre', width: 200, 
-        renderCell: (params) => (
-            <Button 
-                component={Link}
-                to={`/experiments/${params.row.id}/manual-control`}
-            >{params.row.name}</Button>
-    )},
-    { field: 'description', headerName: 'Descripción', width: 400 },
-    { field: 'status', headerName: 'Estado', width: 200 },
-    {
-        field: 'action',
-        headerName: 'Acción',
-        width: 300,
-        renderCell: (params) => (
-            <ExperimentActions
-                experimentId={params.row.id}
-                experimentName={params.row.name}
-                cantRobots={params.row.robotsQuantity}
-                onDelete={() => handleDelete(params.row.id)}
-                isActive={params.row.isActive}
-            />
-        )
-    },
-];
-
 const ExperimentList = () => {
     const [experiments, setExperiments] = useState([]);
 
@@ -50,13 +23,13 @@ const ExperimentList = () => {
 
     const userId = getUserIdFromToken();
 
-    if (!userId) {
-        alert('No se ha encontrado el usuario autenticado');
-        return;
-    }
-
-    // Cargar data del server y reinicializar el form de student
+    // Cargar data del server 
     useEffect(() => {
+        if (!userId) {
+            alert('No se ha encontrado el usuario autenticado');
+            return;
+        }
+
         const fetchExperiments = async () => {
             const token = localStorage.getItem('token'); 
 
@@ -79,14 +52,47 @@ const ExperimentList = () => {
         };
 
         fetchExperiments();
-    }, [apiUrl]);
+    }, [apiUrl, userId]);
 
-    const rows = experiments.map((experiment, index) => ({
+    // Función para eliminar un experimento de la lista
+    const removeExperimentFromList = (experimentId) => {
+        setExperiments(experiments.filter(experiment => experiment._id !== experimentId));
+    };    
+
+
+    const rows = experiments.map((experiment) => ({
         id: experiment._id,
         name: experiment.name,
         description: experiment.description,
         status: experiment.isActive ? 'Activo' : 'Inactivo',
     }));
+
+    
+    const columns = [
+        { field: 'name', headerName: 'Nombre', width: 200, 
+            renderCell: (params) => (
+                <Button 
+                    component={Link}
+                    to={`/experiments/${params.row.id}/manual-control`}
+                >{params.row.name}</Button>
+        )},
+        { field: 'description', headerName: 'Descripción', width: 400 },
+        { field: 'status', headerName: 'Estado', width: 200 },
+        {
+            field: 'action',
+            headerName: 'Acción',
+            width: 300,
+            renderCell: (params) => (
+                <ExperimentActions
+                    experimentId={params.row.id}
+                    experimentName={params.row.name}
+                    cantRobots={params.row.robotsQuantity}
+                    isActive={params.row.isActive}
+                    onDelete={removeExperimentFromList} 
+                />
+            )
+        },
+    ];
 
     return (
         

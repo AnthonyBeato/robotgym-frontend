@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import { useContext } from "react";
 import * as yup from "yup";
 import { useFormik } from 'formik';
 import { TextField } from '@mui/material';
@@ -24,7 +24,7 @@ const Login = () => {
     const { setToken } = useContext(AuthContext);
     const navigate = useNavigate();
 
-    const [initialLoginValues, setInitialLoginValues] = useState(
+    const [initialLoginValues] = useState(
         {
             username: '',
             password: '',
@@ -53,7 +53,7 @@ const Login = () => {
                     localStorage.removeItem("token");
                 }
             })
-            .catch(err => alert('Algo ha salido mal'))
+            .catch((error) => alert("Algo ha salido mal: " + error.message));
     }
 
     const formik = useFormik({

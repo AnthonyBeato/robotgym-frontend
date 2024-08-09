@@ -1,29 +1,12 @@
-import React from "react";
 import * as yup from "yup";
 import { useFormik } from 'formik';
 import { TextField } from '@mui/material';
 import Button from '@mui/material/Button';
 import Grid from '@mui/material/Unstable_Grid2';
 
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
+import PropTypes from 'prop-types'; // ES6
 
-import axios from 'axios';
-
-const getAvailableRobots = async () => {
-    const apiUrl = import.meta.env.VITE_HOST;
-    const token = localStorage.getItem('token');
-    try {
-        const response = await axios.get(apiUrl + '/robots', {
-            headers: {
-                'Authorization': `Bearer ${token}` 
-            }
-        });
-        return response.data;
-    } catch (error) {
-        console.error('Error fetching robots:', error);
-        return [];
-    }
-};
 
 const validationSchema = yup.object({
     experimentName: yup
@@ -43,8 +26,15 @@ const ExperimentForm = (props) => {
         },
     });
 
+    const initialRender = useRef(true);
+
     useEffect(() => {
-        formik.setValues(props.initialValues);
+        if (initialRender.current) {
+            initialRender.current = false;
+        } else {
+            formik.setValues(props.initialValues);
+        }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [props.initialValues]);
 
     return (
@@ -95,5 +85,15 @@ const ExperimentForm = (props) => {
         </div>
     )
 }
+
+ExperimentForm.propTypes = {
+    initialValues: PropTypes.shape({
+        experimentName: PropTypes.string.isRequired,
+        description: PropTypes.string,
+    }).isRequired,
+    onSubmit: PropTypes.func.isRequired,
+    children: PropTypes.node.isRequired,
+};
+
 
 export default ExperimentForm;

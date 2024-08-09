@@ -4,7 +4,7 @@ import { useState } from "react"
 import RobotForm from "./RobotForm"
 
 const CreateRobot = () => {
-    const [formValues, setFormValues] = useState(
+    const [formValues] = useState(
         {
             model: '',
             statusUse: 'Disponible',
@@ -36,7 +36,7 @@ const CreateRobot = () => {
                     Promise.reject()
                 }
             })
-            .catch(err => alert('Algo ha salido mal'))
+            .catch((error) => alert("Algo ha salido mal: " + error.message));
     }
 
     return (

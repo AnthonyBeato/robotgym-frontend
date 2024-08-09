@@ -1,21 +1,29 @@
 import { Link } from 'react-router-dom';
 import Button from '@mui/material/Button';
 import axios from 'axios';
+import PropTypes from 'prop-types'; // ES6
 
 const UsersActions = ({ userId, onDelete }) => {
     const apiUrl = import.meta.env.VITE_HOST;
 
+
+    const token = localStorage.getItem('token');
+
     const deleteUser = () => {
-        axios.delete(apiUrl + '/users/delete-user/' + userId)
+        axios.delete(apiUrl + '/users/delete-user/' + userId, {
+            headers: {
+                'Authorization': `Bearer ${token}` 
+            }
+        })
             .then((res) => {
                 if (res.status === 200) {
                     alert("Usuario borrado satisfactoriamente");
-                    onDelete();
+                    onDelete(userId);
                 } else {
                     Promise.reject();
                 }
             })
-            .catch((err) => alert("Algo ha salido mal"));
+            .catch((error) => alert("Algo ha salido mal: " + error.message));
     }
 
     return (
@@ -39,6 +47,11 @@ const UsersActions = ({ userId, onDelete }) => {
             </Button>
         </div>
     );
+}
+
+UsersActions.propTypes = {
+    userId: PropTypes.string.isRequired,
+    onDelete: PropTypes.func.isRequired
 }
 
 export default UsersActions;

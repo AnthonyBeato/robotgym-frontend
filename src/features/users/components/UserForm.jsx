@@ -1,4 +1,3 @@
-import React from "react";
 import * as yup from "yup";
 import { useFormik } from 'formik';
 import { TextField } from '@mui/material';
@@ -11,8 +10,8 @@ import MenuItem from '@mui/material/MenuItem';
 import FormHelperText from '@mui/material/FormHelperText';
 import Select from '@mui/material/Select';
 
-import { useEffect } from "react";
-
+import { useEffect, useRef} from "react";
+import PropTypes from 'prop-types'; // ES6
 
 const validationSchema = yup.object({
     fullName: yup
@@ -45,8 +44,15 @@ const UserForm = (props) => {
         },
     });
 
+    const initialRender = useRef(true);
+
+
     useEffect(() => {
-        formik.setValues(props.initialValues);
+        if (initialRender.current) {
+            initialRender.current = false;
+        } else {
+            formik.setValues(props.initialValues);
+        }        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [props.initialValues]);
 
     return (
@@ -105,22 +111,24 @@ const UserForm = (props) => {
                             variant="filled"
                         />
                     </Grid>
-                    <Grid xs={12}>
-                        <TextField
-                            id="txt-user-password"
-                            name="password"
-                            placeholder='Contraseña'
-                            value={formik.values.password}
-                            onChange={formik.handleChange}
-                            onBlur={formik.handleBlur}
-                            error={formik.touched.password && Boolean(formik.errors.password)}
-                            helperText={formik.touched.password && formik.errors.password}
-                            fullWidth
-                            type="password"
-                            size='small'
-                            variant="filled"
-                        />
-                    </Grid>
+                    {!props.isEditing ? null : (
+                        <Grid xs={12}>
+                            <TextField
+                                id="txt-user-password"
+                                name="password"
+                                placeholder='Contraseña'
+                                value={formik.values.password}
+                                onChange={formik.handleChange}
+                                onBlur={formik.handleBlur}
+                                error={formik.touched.password && Boolean(formik.errors.password)}
+                                helperText={formik.touched.password && formik.errors.password}
+                                fullWidth
+                                type="password"
+                                size='small'
+                                variant="filled"
+                            />
+                        </Grid>
+                    )}
                     <Grid xs={3}>
                         <FormControl>
                             <InputLabel id="select-role-label">Rol</InputLabel>
@@ -180,5 +188,21 @@ const UserForm = (props) => {
         </div>
     )
 }
+
+
+UserForm.propTypes = {
+    initialValues: PropTypes.shape({
+        fullName: PropTypes.string.isRequired,
+        username: PropTypes.string.isRequired,
+        email: PropTypes.string.isRequired,
+        password: PropTypes.string.isRequired,
+        role: PropTypes.string.isRequired,
+        aprobationStatus: PropTypes.string.isRequired
+    }).isRequired,
+    onSubmit: PropTypes.func.isRequired,
+    children: PropTypes.node.isRequired,
+    isRegistering: PropTypes.bool.isRequired,
+    isEditing: PropTypes.bool,
+};
 
 export default UserForm;

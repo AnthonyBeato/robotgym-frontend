@@ -27,13 +27,38 @@ const EditExperiment = () => {
     }
 
     const userId = getUserIdFromToken();
-
-    if (!userId) {
-        alert('No se ha encontrado el usuario autenticado');
-        return;
-    }
-
     const token = localStorage.getItem('token');
+
+    // Cargar data del server
+    useEffect(() => {
+        if (!userId) {
+            alert('No se ha encontrado el usuario autenticado');
+            return;
+        }
+
+        axios.get(
+            apiUrl + '/experiments/' + id, {
+                headers: {
+                    'Authorization': `Bearer ${token}` 
+                }
+            }
+        )
+            .then((res) => {
+                const {
+                    name,
+                    description,
+                } = res.data;
+                setFormValues(
+                    {
+                        experimentName: name,
+                        description,
+                    }
+                );
+            })
+            .catch(err => console.log(err)
+            );
+    }, [apiUrl, id, token, userId]);
+
 
     // onSubmit handler
     const onSubmit = (experimentObject) => {
@@ -56,33 +81,8 @@ const EditExperiment = () => {
                 } else
                     Promise.reject()
             })
-            .catch(err => alert('Algo ha salido mal'))
+            .catch((error) => alert("Algo ha salido mal: " + error.message));
     }
-
-    // Cargar data del server y reinicializar el form de student
-    useEffect(() => {
-        axios.get(
-            apiUrl + '/experiments/' + id, {
-                headers: {
-                    'Authorization': `Bearer ${token}` 
-                }
-            }
-        )
-            .then((res) => {
-                const {
-                    name,
-                    description,
-                } = res.data;
-                setFormValues(
-                    {
-                        experimentName: name,
-                        description,
-                    }
-                );
-            })
-            .catch(err => console.log(err)
-            );
-    }, [apiUrl, id]);
 
     return (
         <ExperimentForm

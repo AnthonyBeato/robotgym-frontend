@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext, useRef } from 'react';
+import { useState, useEffect, useContext, useRef , useCallback} from 'react';
 import axios from 'axios';
 import Box from '@mui/material/Box';
 import Divider from '@mui/material/Divider';
@@ -19,11 +19,13 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import { AuthContext } from '../context/AuthContext';
-import { Navigate, useLocation, useNavigate, useParams } from 'react-router-dom';
+import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import ROSLIB from 'roslib';
 import { CameraAlt, FiberManualRecord } from '@mui/icons-material';
+import PropTypes from 'prop-types'; // ES6
 
-const BumperIndicator = ({ bumper, active }) => {
+
+const BumperIndicator = ({ active }) => {
     const color = active ? 'red' : 'grey';
     return (
         <Box
@@ -39,13 +41,15 @@ const BumperIndicator = ({ bumper, active }) => {
     );
 };
 
+BumperIndicator.propTypes = {
+    active: PropTypes.string.isRequired,
+}
+
 function ExperimentManualControlPage() {
     const { token, loading } = useContext(AuthContext);
     const [connected, setConnected] = useState(false);
-    const location = useLocation();
     const navigate = useNavigate();
     const { id: experimentId } = useParams();
-    const { robotsQuantity } = location.state || {};
     const [robotNumber, setRobotNumber] = useState('');
     const [speed, setSpeed] = useState(1000);  // Initial speed set to 1000
     const [bumpers, setBumpers] = useState([false, false, false, false, false, false]);  // Initial bumper states
@@ -65,7 +69,7 @@ function ExperimentManualControlPage() {
 
     const maxReconnectAttempts = 5;
 
-    const connectWebSocket = () => {
+    const connectWebSocket = useCallback(() => {
         if (reconnectAttemptsRef.current > maxReconnectAttempts) {
             console.error('Failed to connect to websocket server after maximum attempts');
             setIsReconnecting(false);
@@ -134,7 +138,7 @@ function ExperimentManualControlPage() {
             }
         });
         rosRef.current = ros;  // Save the ros reference
-    };
+    }, [isReconnecting]);
 
     useEffect(() => {
         connectWebSocket();
@@ -150,7 +154,7 @@ function ExperimentManualControlPage() {
                 clearTimeout(reconnectTimeoutRef.current);
             }
         };
-    }, []);
+    }, [connectWebSocket]);
 
     const publisher = new ROSLIB.Topic({
         ros: rosRef.current,
@@ -184,7 +188,7 @@ function ExperimentManualControlPage() {
                 Promise.reject();
             }
         })
-        .catch((err) => alert('Algo ha salido mal al detener el experimento'));
+        .catch((error) => alert('Algo ha salido mal al detener el experimento' + error.message));
     };
 
     const takePhoto = () => {

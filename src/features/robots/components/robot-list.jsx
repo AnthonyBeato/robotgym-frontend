@@ -6,27 +6,6 @@ import { Link } from 'react-router-dom';
 import Button from '@mui/material/Button';
 
 
-const columns = [
-    { field: 'model', headerName: 'Modelo', width: 200, 
-        renderCell: (params) => (
-            <Button 
-                component={Link}
-                to={`/robots/${params.row.id}`}
-            >{params.row.model}</Button>
-    )},
-    { field: 'statusUse', headerName: 'Estado', width: 400 },
-    {
-        field: 'action',
-        headerName: 'Acción',
-        width: 200,
-        renderCell: (params) => (
-            <RobotActions
-                robotId={params.row.id}
-                onDelete={() => handleDelete(params.row.id)}
-            />
-        )
-    },
-];
 
 const RobotList = () => {
     const [robots, setRobots] = useState([]);
@@ -59,11 +38,38 @@ const RobotList = () => {
         fetchRobots();
     }, [apiUrl]);
 
-    const rows = robots.map((robot, index) => ({
+    // Función para eliminar un experimento de la lista
+    const removeRobotFromList = (robotId) => {
+        setRobots(robots.filter(robot => robot._id !== robotId));
+    };        
+    
+    const rows = robots.map((robot) => ({
         id: robot._id,
         model: robot.model,
         statusUse: robot.statusUse,
     }));
+
+    const columns = [
+        { field: 'model', headerName: 'Modelo', width: 200, 
+            renderCell: (params) => (
+                <Button 
+                    component={Link}
+                    to={`/robots/${params.row.id}`}
+                >{params.row.model}</Button>
+        )},
+        { field: 'statusUse', headerName: 'Estado', width: 400 },
+        {
+            field: 'action',
+            headerName: 'Acción',
+            width: 200,
+            renderCell: (params) => (
+                <RobotActions
+                    robotId={params.row.id}
+                    onDelete={removeRobotFromList} 
+                />
+            )
+        },
+    ];
 
     return (
         

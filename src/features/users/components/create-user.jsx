@@ -2,11 +2,13 @@ import axios from "axios"
 import { useState } from "react"
 
 import UserForm from "./UserForm"
+import PropTypes from 'prop-types'; // ES6
+
 
 const CreateUser = (props) => {
     const isRegistering = props.isRegistering;
 
-    const [formValues, setFormValues] = useState(
+    const [formValues] = useState(
         {
             fullName: '',
             username: '',
@@ -18,6 +20,8 @@ const CreateUser = (props) => {
     )
 
     const apiUrl = import.meta.env.VITE_HOST;
+    const token = localStorage.getItem('token');
+
     // onSubmit handler
     const onSubmit = (userObject) => {
         const newUser = {
@@ -31,7 +35,11 @@ const CreateUser = (props) => {
 
         axios.post(
             apiUrl + '/users/create-user',
-            newUser)
+            newUser, {
+                headers: {
+                    'Authorization': `Bearer ${token}` 
+                }
+            })
             .then((res) => {
                 if (res.status === 201) {
                     alert('Usuario creado exitosamente')
@@ -40,7 +48,7 @@ const CreateUser = (props) => {
                     Promise.reject()
                 }
             })
-            .catch(err => alert('Algo ha salido mal'))
+            .catch((error) => alert("Algo ha salido mal: " + error.message));
     }
 
     return (
@@ -54,5 +62,10 @@ const CreateUser = (props) => {
     )
 
 }
+
+CreateUser.propTypes = {
+    isRegistering: PropTypes.bool.isRequired,
+};
+
 
 export default CreateUser;

@@ -1,12 +1,8 @@
-import React from 'react';
-
 import Box from '@mui/material/Box';
 import Divider from '@mui/material/Divider';
 import Footer from '../components/Footer';
 import GeneralPageStructure from '../components/GeneralPageStructure';
 import Stack from '@mui/material/Stack';
-import CreateExperiment from '../features/experiments/components/create-experiment';
-import Grid from '@mui/material/Unstable_Grid2';
 import Button from '@mui/material/Button';
 import { Link } from "react-router-dom";
 
