@@ -73,7 +73,7 @@ const ExperimentList = () => {
             renderCell: (params) => (
                 <Button 
                     component={Link}
-                    to={`/experiments/${params.row.id}/manual-control`}
+                    to={`/experiments/${params.row.id}/control`}
                 >{params.row.name}</Button>
         )},
         { field: 'description', headerName: 'Descripción', width: 400 },

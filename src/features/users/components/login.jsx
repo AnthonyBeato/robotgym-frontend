@@ -45,7 +45,7 @@ const Login = () => {
                     alert('Usuario logueado exitosamente');
                     setToken(res.data.token);
                     localStorage.setItem("token", res.data.token);
-                    navigate("/");
+                    navigate("/experiments");
                 }
                 else {
                     Promise.reject()

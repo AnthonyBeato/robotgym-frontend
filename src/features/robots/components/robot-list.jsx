@@ -47,6 +47,8 @@ const RobotList = () => {
         id: robot._id,
         model: robot.model,
         statusUse: robot.statusUse,
+        ip: robot.ip,
+        hostname: robot.hostname,
     }));
 
     const columns = [
@@ -57,7 +59,9 @@ const RobotList = () => {
                     to={`/robots/${params.row.id}`}
                 >{params.row.model}</Button>
         )},
-        { field: 'statusUse', headerName: 'Estado', width: 400 },
+        { field: 'statusUse', headerName: 'Estado', width: 200 },
+        { field: 'ip', headerName: 'Dirección IP', width: 200},
+        { field: 'hostname', headerName: 'Nombre de Host', width: 200},
         {
             field: 'action',
             headerName: 'Acción',

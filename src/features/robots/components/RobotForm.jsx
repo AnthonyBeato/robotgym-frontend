@@ -21,6 +21,12 @@ const validationSchema = yup.object({
     statusUse: yup
         .string('Entra la descripción del experimento')
         .required("Requerido"),
+    ip: yup
+        .string('Entra la IP del Raspberry Pi conectada al robot')
+        .required("Requerido"),
+    hostname: yup
+        .string('Entra el nombre de Host del Raspberry Pi conectada al robot')
+        .required("Requerido"),
 });
 
 const RobotForm = (props) => {
@@ -67,9 +73,43 @@ const RobotForm = (props) => {
                             variant="filled"
                         />
                     </Grid>
+                    <Grid xs={6}>
+                        <TextField
+                            id="txt-robot-ip"
+                            name="ip"
+                            placeholder='Dirección IP'
+                            aria-label='Dirrección IP del Raspberry Pi'
+                            value={formik.values.ip}
+                            onChange={formik.handleChange}
+                            onBlur={formik.handleBlur}
+                            error={formik.touched.ip && Boolean(formik.errors.ip)}
+                            helperText={formik.touched.ip && formik.errors.ip}
+                            fullWidth
+                            size='small'
+                            required
+                            variant="filled"
+                        />
+                    </Grid>
+                    <Grid xs={6}>
+                        <TextField
+                            id="txt-robot-hostname"
+                            name="hostname"
+                            placeholder='Nombre de Host'
+                            aria-label='Hostname del Raspberry Pi'
+                            value={formik.values.hostname}
+                            onChange={formik.handleChange}
+                            onBlur={formik.handleBlur}
+                            error={formik.touched.hostname && Boolean(formik.errors.hostname)}
+                            helperText={formik.touched.hostname && formik.errors.hostname}
+                            fullWidth
+                            size='small'
+                            required
+                            variant="filled"
+                        />
+                    </Grid>
                     <Grid xs={3}>
                         <FormControl>
-                            <InputLabel id="select-status-robot-label">Rol</InputLabel>
+                            <InputLabel id="select-status-robot-label">Estado</InputLabel>
                             <Select
                                 labelId="select-status-robot-labell"
                                 id="select-status-robot"

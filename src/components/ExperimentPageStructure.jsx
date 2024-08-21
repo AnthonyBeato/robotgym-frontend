@@ -1,29 +1,7 @@
-import * as React from 'react';
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
-import { styled } from '@mui/material/styles';
+import PropTypes from 'prop-types'; // ES6
 
-const StyledBox = styled('div')(({ theme }) => ({
-  alignSelf: 'center',
-  width: '100%',
-  height: 400,
-  marginTop: theme.spacing(8),
-  borderRadius: theme.shape.borderRadius,
-  outline: '1px solid',
-  boxShadow: '0 0 12px 8px hsla(220, 25%, 80%, 0.2)',
-  backgroundImage: `url(${'/static/images/templates/templates-images/hero-light.png'})`,
-  outlineColor: 'hsla(220, 25%, 80%, 0.5)',
-  backgroundSize: 'cover',
-  [theme.breakpoints.up('sm')]: {
-    marginTop: theme.spacing(10),
-    height: 700,
-  },
-  ...theme.applyStyles('dark', {
-    boxShadow: '0 0 24px 12px hsla(210, 100%, 25%, 0.2)',
-    backgroundImage: `url(${'/static/images/templates/templates-images/hero-dark.png'})`,
-    outlineColor: 'hsla(210, 100%, 80%, 0.1)',
-  }),
-}));
 
 export default function ExperimentPageStructure({ children }) {
   return (
@@ -45,7 +23,7 @@ export default function ExperimentPageStructure({ children }) {
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
-          pt: { xs: 14/2, sm: 20/2 },
+          pt: { xs: 14/2, sm: 25/2 },
           pb: { xs: 8/2, sm: 12/2 },
         }}
       >
@@ -56,3 +34,8 @@ export default function ExperimentPageStructure({ children }) {
     </Box>
   );
 }
+
+ExperimentPageStructure.propTypes = {
+    children: PropTypes.node.isRequired,
+}
+

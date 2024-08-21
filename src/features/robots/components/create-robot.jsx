@@ -8,6 +8,8 @@ const CreateRobot = () => {
         {
             model: '',
             statusUse: 'Disponible',
+            ip: '',
+            hostname: '',
         }
     )
 
@@ -19,6 +21,8 @@ const CreateRobot = () => {
         const newRobot = {
             model: robotObject.model,
             statusUse: robotObject.statusUse,
+            ip: robotObject.ip,
+            hostname: robotObject.hostname,
         };
 
         const token = localStorage.getItem('token');

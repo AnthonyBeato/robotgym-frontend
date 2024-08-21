@@ -18,7 +18,7 @@ import EditUserPage from './routes/userEditPage.jsx'
 import HomePage from './routes/homePage.jsx'
 import LoginPage from './routes/loginPage.jsx'
 import RegisterPage from './routes/registerPage.jsx'
-import ExperimentManualControlPage from './routes/experimentManualControlPage.jsx'
+import ExperimentControlPage from './routes/experimentControlPage.jsx'
 
 import { AuthProvider } from './context/AuthContext.jsx'
 import RobotPage from './routes/robotPage.jsx'
@@ -48,8 +48,8 @@ const router = createBrowserRouter([
         element: <EditExperimentPage />,
       },
       {
-        path: "experiments/:id/manual-control/",
-        element: <ExperimentManualControlPage />
+        path: "experiments/:id/control",
+        element: <ExperimentControlPage />
       },
       {
         path: "robots",

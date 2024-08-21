@@ -8,6 +8,8 @@ const EditRobot = () => {
         {
             model: '',
             statusUse: 'Disponible',
+            ip: '',
+            hostname: '',
         }
     )
     const { id } = useParams();
@@ -21,6 +23,8 @@ const EditRobot = () => {
         const updatedRobot = {
             model: robotObject.model,
             statusUse: robotObject.statusUse,
+            ip: robotObject.ip,
+            hostname: robotObject.hostname,
         }
 
         axios.put(
@@ -53,11 +57,15 @@ const EditRobot = () => {
                 const {
                     model,
                     statusUse,
+                    ip,
+                    hostname,
                 } = res.data;
                 setFormValues(
                     {
                         model,
                         statusUse,
+                        ip,
+                        hostname,
                     }
                 );
             })

@@ -69,16 +69,17 @@ const ExperimentActions = ({ experimentId, experimentName, isActive, onDelete })
 
     // Iniciar un experimento 
     const startExperiment = () => {
-        axios.post(apiUrl + '/experiments/start-experiment/' + experimentId, {
+        axios.post(apiUrl + '/experiments/start-experiment/' + experimentId, {}, {
             headers: {
                 'Authorization': `Bearer ${token}` 
             }
         })
             .then((res) => {
+                console.log(token);
                 if (res.status === 200) {
                     // Iniciando experimento
                     // Redireccionar a la pantalla de experimento iniciado
-                    navigate(`/experiments/${experimentId}/manual-control`);
+                    navigate(`/experiments/${experimentId}/control`);
                 } else {
                     Promise.reject();
                 }
@@ -88,7 +89,7 @@ const ExperimentActions = ({ experimentId, experimentName, isActive, onDelete })
 
     //  Retomar un experimento no desactivado
     const retakeExperiment = () => {
-        axios.post(apiUrl + '/experiments/' + experimentId + '/manual-control', {
+        axios.post(apiUrl + '/experiments/' + experimentId + '/control', {
             headers: {
                 'Authorization': `Bearer ${token}` 
             }
