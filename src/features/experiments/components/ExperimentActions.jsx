@@ -9,6 +9,7 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogTitle from '@mui/material/DialogTitle';
 import Slide from '@mui/material/Slide';
 import PropTypes from 'prop-types'; // ES6
+import QueuePositionModal from '../../queue/QueuePositionModal';
 
 
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -20,19 +21,31 @@ const ExperimentActions = ({ experimentId, experimentName, isActive, onDelete })
     const apiUrl = import.meta.env.VITE_HOST;
     const navigate = useNavigate();
 
-    const [open, setOpen] = React.useState(false);
+    const [openConfirm, setOpenConfirm] = React.useState(false);
+    const [openQueueModal, setOpenQueueModal] = React.useState(false);
 
-    const handleClickOpen = () => {
-      setOpen(true);
+
+    const handleClickOpenConfirm = () => {
+      setOpenConfirm(true);
     };
   
-    const handleClose = () => {
-      setOpen(false);
+    const handleCloseConfirm = () => {
+      setOpenConfirm(false);
     };
+
+    const handleOpenQueueModal = () => {
+        setOpenQueueModal(true);
+        handleCloseConfirm(); // Cierra el modal de confirmación al abrir el modal de cola
+    };
+
+    const handleCloseQueueModal = () => {
+        setOpenQueueModal(false);
+    };
+    
+    const token = localStorage.getItem('token'); 
 
     // Función para obtener el ID del usuario del token JWT
     const getUserIdFromToken = () => {
-        const token = localStorage.getItem('token'); 
         if (token) {
             const decodedToken = jwtDecode(token);
             return decodedToken.userId;
@@ -47,25 +60,48 @@ const ExperimentActions = ({ experimentId, experimentName, isActive, onDelete })
         return;
     }
 
-    const token = localStorage.getItem('token');
-
-    // Borrar un experimento
-    const deleteExperiment = () => {
-        axios.delete(apiUrl + '/experiments/delete-experiment/' + experimentId, {
+    // Función intermedia para agregar el experimento a la cola y verificar su posición
+    const addToQueueAndStart = () => {
+        axios.post(`${apiUrl}/queue/add`, { experimentId }, {
             headers: {
-                'Authorization': `Bearer ${token}` 
+                'Authorization': `Bearer ${token}`
             }
         })
-            .then((res) => {
-                if (res.status === 200) {
-                    alert("Experimento borrado satisfactoriamente");
-                    onDelete(experimentId);
-                } else {
-                    Promise.reject();
+        .then((res) => {
+            if (res.status === 200) {
+                // Abrir modal de cola para mostrar la posición
+                handleOpenQueueModal();
+                // Aquí puedes agregar lógica adicional para verificar si es el turno del usuario
+                // Si es su turno, se llama a startExperiment
+                checkQueuePositionAndStartExperiment();
+            } else {
+                Promise.reject();
+            }
+        })
+        .catch((error) => alert("Algo ha salido mal: " + error.message));
+    };
+
+    // Verifica la posición en la cola y, si es el turno del usuario, inicia el experimento
+    const checkQueuePositionAndStartExperiment = () => {
+        const fetchQueuePosition = async () => {
+            try {
+                const response = await axios.get(`${apiUrl}/queue/first`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+                const firstExperiment = response.data;
+                if (firstExperiment._id === experimentId) {
+                    startExperiment(); // Llama a startExperiment cuando sea el turno del usuario
                 }
-            })
-            .catch((error) => alert("Algo ha salido mal: " + error.message));
-    }
+            } catch (error) {
+                console.error("Error al obtener la posición en la cola", error);
+            }
+        };
+
+        fetchQueuePosition();
+    };
+
 
     // Iniciar un experimento 
     const startExperiment = () => {
@@ -86,6 +122,25 @@ const ExperimentActions = ({ experimentId, experimentName, isActive, onDelete })
             })
             .catch((error) => alert("Algo ha salido mal: " + error.message));
     }
+
+    // Borrar un experimento
+    const deleteExperiment = () => {
+        axios.delete(apiUrl + '/experiments/delete-experiment/' + experimentId, {
+            headers: {
+                'Authorization': `Bearer ${token}` 
+            }
+        })
+            .then((res) => {
+                if (res.status === 200) {
+                    alert("Experimento borrado satisfactoriamente");
+                    onDelete(experimentId);
+                } else {
+                    Promise.reject();
+                }
+            })
+            .catch((error) => alert("Algo ha salido mal: " + error.message));
+    }
+
 
     //  Retomar un experimento no desactivado
     const retakeExperiment = () => {
@@ -112,24 +167,29 @@ const ExperimentActions = ({ experimentId, experimentName, isActive, onDelete })
                 variant="contained"
                 color="primary"
                 style={{ marginLeft: '10px' }}
-                onClick={handleClickOpen}
+                onClick={handleClickOpenConfirm}
                 >
                     Iniciar
                 </Button>
             )}
             <Dialog
-                open={open}
+                open={openConfirm}
                 TransitionComponent={Transition}
                 keepMounted
-                onClose={handleClose}
+                onClose={handleCloseConfirm}
                 aria-describedby="alert-dialog-start-experiment"
             >
                 <DialogTitle>¿Está seguro que quiere iniciar <b>{experimentName}</b>?</DialogTitle>
                 <DialogActions>
-                    <Button variant='outlined' onClick={handleClose}>Cancelar</Button>
-                    <Button variant='contained' onClick={startExperiment}>Aceptar</Button>
+                    <Button variant='outlined' onClick={handleCloseConfirm}>Cancelar</Button>
+                    <Button variant='contained' onClick={addToQueueAndStart}>Aceptar</Button>
                 </DialogActions>
             </Dialog>
+            <QueuePositionModal
+                open={openQueueModal}
+                onClose={handleCloseQueueModal}
+                experimentId={experimentId}
+            />
             <Button
                 variant="outlined"
                 color="info"

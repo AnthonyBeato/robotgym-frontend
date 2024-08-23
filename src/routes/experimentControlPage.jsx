@@ -153,7 +153,7 @@ function ExperimentControlPage() {
                 Promise.reject();
             }
         })
-        .catch((error) => alert('Algo ha salido mal al detener el experimento' + error.message));
+        .catch((error) => alert('Algo ha salido mal al detener el experimento: ' + error.message));
       };
 
 
