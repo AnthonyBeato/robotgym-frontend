@@ -10,36 +10,34 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 
 const DragNdrop = ({
-  onFilesSelected,
+  onFileSelected,
   width,
   height,
 }) => {
-  const [files, setFiles] = useState([]);
+  const [file, setFile] = useState(null);
   const theme = useTheme();
 
   const handleFileChange = (event) => {
-    const selectedFiles = event.target.files;
-    if (selectedFiles && selectedFiles.length > 0) {
-      const newFiles = Array.from(selectedFiles);
-      setFiles((prevFiles) => [...prevFiles, ...newFiles]);
+    const selectedFile = event.target.files[0];
+    if (selectedFile) {
+      setFile(selectedFile);
     }
   };
   const handleDrop = (event) => {
     event.preventDefault();
-    const droppedFiles = event.dataTransfer.files;
-    if (droppedFiles.length > 0) {
-      const newFiles = Array.from(droppedFiles);
-      setFiles((prevFiles) => [...prevFiles, ...newFiles]);
+    const droppedFile = event.dataTransfer.files[0];
+    if (droppedFile) {
+      setFile(droppedFile);
     }
   };
 
-  const handleRemoveFile = (index) => {
-    setFiles((prevFiles) => prevFiles.filter((_, i) => i !== index));
+  const handleRemoveFile = () => {
+    setFile(null);
   };
 
   useEffect(() => {
-    onFilesSelected(files);
-  }, [files, onFilesSelected]);
+    onFileSelected(file);
+  }, [file, onFileSelected]);
 
   return (
     <Box
@@ -81,7 +79,7 @@ const DragNdrop = ({
               Arrastra tu rutina aquí
             </Typography>
             <Typography variant="body2">
-              Archivos permitidos: <br /> .py o .cpp
+              Tipos de archivos permitidos: <br /> .py o .cpp
             </Typography>
           </Box>
         </Box>
@@ -91,7 +89,6 @@ const DragNdrop = ({
           id="browse"
           onChange={handleFileChange}
           accept=".py,.cpp"
-          multiple
         />
         <label htmlFor="browse">
           <Button
@@ -110,48 +107,32 @@ const DragNdrop = ({
         </label>
       </Box>
 
-      {files.length > 0 && (
+      {file && (
         <Box
           sx={{
             mt: 2,
             display: 'flex',
-            flexDirection: 'column',
-            gap: theme.spacing(1),
-            width: '100%',
-            height: '30vh',
-            overflow: 'auto',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            padding: theme.spacing(1),
+            border: `1px solid ${theme.palette.divider}`,
+            borderRadius: theme.shape.borderRadius,
+            backgroundColor: theme.palette.background.paper,
           }}
         >
-          {files.map((file, index) => (
-            <Box
-              key={index}
-              sx={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-                padding: theme.spacing(1),
-                border: `1px solid ${theme.palette.divider}`,
-                borderRadius: theme.shape.borderRadius,
-                backgroundColor: theme.palette.background.paper,
-              }}
-            >
-              <Box sx={{ flex: 1 }}>
-                <Typography variant="body2" sx={{ color: theme.palette.text.primary }}>
-                  {file.name}
-                </Typography>
-              </Box>
-              <IconButton
-                onClick={() => handleRemoveFile(index)}
-                sx={{ color: theme.palette.error.main }}
-              >
-                <ClearIcon />
-              </IconButton>
-            </Box>
-          ))}
+          <Typography variant="body2" sx={{ color: theme.palette.text.primary }}>
+            {file.name}
+          </Typography>
+          <IconButton
+            onClick={handleRemoveFile}
+            sx={{ color: theme.palette.error.main }}
+          >
+            <ClearIcon />
+          </IconButton>
         </Box>
       )}
 
-      {files.length > 0 && (
+      {file && (
         <Box
           sx={{
             mt: 2,
@@ -162,7 +143,7 @@ const DragNdrop = ({
         >
           <CheckCircleOutlineIcon sx={{ mr: 1 }} />
           <Typography variant="body2" sx={{ fontWeight: 'bold' }}>
-            {files.length} archivo(s) seleccionado(s)
+            Archivo seleccionado
           </Typography>
         </Box>
       )}
@@ -171,7 +152,7 @@ const DragNdrop = ({
 };
 
 DragNdrop.propTypes = {
-    onFilesSelected: PropTypes.func.isRequired,
+    onFileSelected: PropTypes.func.isRequired,
     width: PropTypes.number.isRequired,
     height: PropTypes.number.isRequired
 }

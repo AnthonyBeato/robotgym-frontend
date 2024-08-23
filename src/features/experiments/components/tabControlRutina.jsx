@@ -10,22 +10,20 @@ import { AuthContext } from "../../../context/AuthContext";
 
 export default function TabControlRoutine({experimentId}) {
 
-  const [files, setFiles] = useState([]);
+  const [file, setFile] = useState(null);
   const { token } = useContext(AuthContext);
 
   const handleExecute = async () => {
-    if (files.length > 0) {
+    if (file) {
       const formData = new FormData();
-      // Adjuntando múltiples archivos
-      files.forEach((file) => {
-        formData.append('files', file); 
-      });
+      // Adjuntando el archivo
+      formData.append('file', file);
       formData.append('experimentId', experimentId); 
 
       try {
         const apiUrl = import.meta.env.VITE_HOST;
         
-        // Subir los archivos al backend
+        // Subir el archivo al backend
         const uploadResponse = await axios.post(`${apiUrl}/routines/upload`, formData, {
           headers: {
             'Content-Type': 'multipart/form-data',
@@ -65,7 +63,7 @@ export default function TabControlRoutine({experimentId}) {
     <div>
       <Grid container gap={2} sx={{flexGrow: 1, justifyContent: 'center'}}>
         <Grid>
-          <DragNdrop onFilesSelected={setFiles} width="300px" height='300px' />
+          <DragNdrop onFileSelected={setFile} width="300px" height='300px' />
         </Grid>
         <Grid >
           <Button variant="contained" color="secondary" onClick={handleExecute}>
