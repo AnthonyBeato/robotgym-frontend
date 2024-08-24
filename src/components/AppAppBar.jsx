@@ -23,6 +23,8 @@ import { useNavigate } from "react-router-dom"
 import { AuthContext } from '../context/AuthContext';
 import { jwtDecode } from 'jwt-decode';
 import axiosInstance from '../instance/axiosIntance';
+import CustomAlert from './CustomAlert';
+import {useState } from "react"
 
 function AppAppBar({ mode, toggleColorMode }) {
   const [open, setOpen] = React.useState(false);
@@ -49,6 +51,11 @@ function AppAppBar({ mode, toggleColorMode }) {
     }
   };
 
+  
+  const [alertOpen, setAlertOpen] = useState(false);
+  const [alertMessage, setAlertMessage] = useState('');
+  const [alertSeverity, setAlertSeverity] = useState('success');
+
   const handleLogout = () => {
     const apiUrl = import.meta.env.VITE_HOST;
 
@@ -61,8 +68,9 @@ function AppAppBar({ mode, toggleColorMode }) {
             navigate("/users/login");
         })
         .catch((error) => {
-            console.error("Error logging out: ", error);
-            alert("Error al cerrar sesión");
+            setAlertMessage('Error cerrando sesión: ', error);
+            setAlertSeverity('error');
+            setAlertOpen(true);
         });
   };
 
@@ -252,6 +260,13 @@ function AppAppBar({ mode, toggleColorMode }) {
           </Box>
         </Toolbar>
       </Container>
+
+      <CustomAlert 
+        open={alertOpen} 
+        onClose={() => setAlertOpen(false)} 
+        message={alertMessage} 
+        severity={alertSeverity} 
+      />
     </AppBar>
   );
 }

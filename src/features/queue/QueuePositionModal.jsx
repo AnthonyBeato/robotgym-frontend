@@ -3,11 +3,16 @@ import { Dialog, DialogTitle, DialogContent, DialogActions, Typography, Button }
 import axiosInstance from '../../instance/axiosIntance';
 import { jwtDecode } from 'jwt-decode';
 import PropTypes from 'prop-types'; // ES6
+import CustomAlert from '../../components/CustomAlert';
 
 const QueuePositionModal = ({ open, onClose, experimentId }) => {
     const [position, setPosition] = useState(null);
     const [nextUser, setNextUser] = useState('');
     const apiUrl = import.meta.env.VITE_HOST;
+
+    const [alertOpen, setAlertOpen] = useState(false);
+    const [alertMessage, setAlertMessage] = useState('');
+    const [alertSeverity, setAlertSeverity] = useState('success');
     
     useEffect(() => {
         // Función para obtener el ID del usuario del token JWT
@@ -23,7 +28,9 @@ const QueuePositionModal = ({ open, onClose, experimentId }) => {
         const userId = getUserIdFromToken();
     
         if (!userId) {
-            alert('No se ha encontrado el usuario autenticado');
+            setAlertMessage("No se ha encontrado el usuario autenticado");
+            setAlertSeverity('error');
+            setAlertOpen(true);
             return;
         }
         if (open) {
@@ -51,16 +58,25 @@ const QueuePositionModal = ({ open, onClose, experimentId }) => {
     }, [open, experimentId, apiUrl]);
 
     return (
-        <Dialog open={open} onClose={onClose}>
-            <DialogTitle>Tu posición en la cola</DialogTitle>
-            <DialogContent>
-                <Typography variant="h6">Posición actual: {position}</Typography>
-                <Typography variant="subtitle1">Próximo en la cola: {nextUser}</Typography>
-            </DialogContent>
-            <DialogActions>
-                <Button onClick={onClose} color="primary">Cerrar</Button>
-            </DialogActions>
-        </Dialog>
+        <>
+            <Dialog open={open} onClose={onClose}>
+                <DialogTitle>Tu posición en la cola</DialogTitle>
+                <DialogContent>
+                    <Typography variant="h6">Posición actual: {position}</Typography>
+                    <Typography variant="subtitle1">Próximo en la cola: {nextUser}</Typography>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={onClose} color="primary">Cerrar</Button>
+                </DialogActions>
+            </Dialog>
+
+            <CustomAlert 
+                open={alertOpen} 
+                onClose={() => setAlertOpen(false)} 
+                message={alertMessage} 
+                severity={alertSeverity} 
+            />
+        </>
     );
 };
 

@@ -13,6 +13,7 @@ import { CameraAlt, FiberManualRecord } from '@mui/icons-material';
 import PropTypes from 'prop-types'; // ES6
 import ControlTabs from '../features/experiments/components/ControlTabs';
 import StopIcon from '@mui/icons-material/Stop';
+import CustomAlert from '../components/CustomAlert';
 
 
 const BumperIndicator = ({ active }) => {
@@ -47,6 +48,10 @@ function ExperimentControlPage() {
     const [availableRobots, setAvailableRobots] = useState([]);
     const [connected] = useState(false);
     const navigate = useNavigate();
+
+    const [alertOpen, setAlertOpen] = useState(false);
+    const [alertMessage, setAlertMessage] = useState('');
+    const [alertSeverity, setAlertSeverity] = useState('success');
 
 
     // const maxReconnectAttempts = 10;
@@ -147,13 +152,21 @@ function ExperimentControlPage() {
         })
         .then((res) => {
             if (res.status === 200) {
-                alert('Experimento detenido satisfactoriamente');
-                navigate('/experiments');
+                setAlertMessage('Experimento detenido exitosamente');
+                setAlertSeverity('success');
+                setAlertOpen(true);
+                setTimeout(() => {
+                    navigate("/experiments");
+                }, 1500);
             } else {
                 Promise.reject();
             }
         })
-        .catch((error) => alert('Algo ha salido mal al detener el experimento: ' + error.message));
+        .catch((error) => {
+            setAlertMessage("Algo ha salido mal detener el experimento: " + error.message);
+            setAlertSeverity('error');
+            setAlertOpen(true);
+        });
       };
 
 
@@ -277,6 +290,13 @@ function ExperimentControlPage() {
                 <Divider />
                 <Footer />
             </Box>
+
+            <CustomAlert 
+                open={alertOpen} 
+                onClose={() => setAlertOpen(false)} 
+                message={alertMessage} 
+                severity={alertSeverity} 
+            />
         </>
     );
 }

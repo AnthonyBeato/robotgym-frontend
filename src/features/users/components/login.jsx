@@ -5,11 +5,12 @@ import { TextField } from '@mui/material';
 import Button from '@mui/material/Button';
 import Grid from '@mui/material/Unstable_Grid2';
 import axiosInstance from '../../../instance/axiosIntance';
-import {useState } from "react"
 
 import { useNavigate } from "react-router-dom"
 
 import { AuthContext } from "../../../context/AuthContext";
+import {useState } from "react"
+import CustomAlert from "../../../components/CustomAlert";
 
 const validationSchema = yup.object({
     username: yup
@@ -31,6 +32,10 @@ const Login = () => {
         }
     )
 
+    const [alertOpen, setAlertOpen] = useState(false);
+    const [alertMessage, setAlertMessage] = useState('');
+    const [alertSeverity, setAlertSeverity] = useState('success');
+
     const apiUrl = import.meta.env.VITE_HOST;
     // onSubmit handler
     const onSubmit = (userObject) => {
@@ -42,20 +47,32 @@ const Login = () => {
         axiosInstance.post( apiUrl + '/users/login', user)
             .then((res) => {
                 if (res.status === 200) {
-                    alert('Usuario logueado exitosamente');
+                    setAlertMessage('Usuario logueado exitosamente');
+                    setAlertSeverity('success');
+                    setAlertOpen(true);
+
                     setToken(res.data.accessToken);
                     localStorage.setItem("token", res.data.accessToken);
                     localStorage.setItem("refreshToken", res.data.refreshToken); 
-                    navigate("/experiments");
-                }
-                else {
-                    Promise.reject()
+
+                    setTimeout(() => {
+                        navigate("/experiments");
+                    }, 1500);
+                } else {
                     setToken(null);
                     localStorage.removeItem("token");
                     localStorage.removeItem("refreshToken");
+                    
+                    setAlertMessage('Algo ha salido mal. Inténtalo de nuevo.');
+                    setAlertSeverity('error');
+                    setAlertOpen(true);
                 }
             })
-            .catch((error) => alert("Algo ha salido mal: " + error.message));
+            .catch((error) => {
+                setAlertMessage("Algo ha salido mal: " + error.message);
+                setAlertSeverity('error');
+                setAlertOpen(true);
+            });
     }
 
     const formik = useFormik({
@@ -109,6 +126,13 @@ const Login = () => {
                     </Grid>
                 </Grid>
             </form>
+
+            <CustomAlert 
+                open={alertOpen} 
+                onClose={() => setAlertOpen(false)} 
+                message={alertMessage} 
+                severity={alertSeverity} 
+            />
         </div>
     )
 }

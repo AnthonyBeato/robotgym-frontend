@@ -2,6 +2,7 @@ import axiosInstance from '../../../instance/axiosIntance';
 import { useState } from "react"
 
 import RobotForm from "./RobotForm"
+import CustomAlert from "../../../components/CustomAlert";
 
 const CreateRobot = () => {
     const [formValues] = useState(
@@ -14,7 +15,9 @@ const CreateRobot = () => {
     )
 
     const apiUrl = import.meta.env.VITE_HOST;
-
+    const [alertOpen, setAlertOpen] = useState(false);
+    const [alertMessage, setAlertMessage] = useState('');
+    const [alertSeverity, setAlertSeverity] = useState('success');
 
     // onSubmit handler
     const onSubmit = (robotObject) => {
@@ -34,22 +37,37 @@ const CreateRobot = () => {
         })
             .then((res) => {
                 if (res.status === 201) {
-                    alert('Robot creado exitosamente')
+                    setAlertMessage('Robot creado exitosamente');
+                    setAlertSeverity('success');
+                    setAlertOpen(true);
                 }
                 else {
                     Promise.reject()
                 }
             })
-            .catch((error) => alert("Algo ha salido mal: " + error.message));
+            .catch((error) => {
+                setAlertMessage("Algo ha salido mal: " + error.message);
+                setAlertSeverity('error');
+                setAlertOpen(true);
+            });
     }
 
     return (
-        <RobotForm
-            initialValues={formValues}
-            onSubmit={onSubmit}
-        >
-            Crear Robot
-        </RobotForm>
+        <>            
+            <RobotForm
+                initialValues={formValues}
+                onSubmit={onSubmit}
+            >
+                Crear Robot
+            </RobotForm>
+            
+            <CustomAlert 
+                open={alertOpen} 
+                onClose={() => setAlertOpen(false)} 
+                message={alertMessage} 
+                severity={alertSeverity} 
+            />
+        </>
     )
 
 }

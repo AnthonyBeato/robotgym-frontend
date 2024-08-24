@@ -5,6 +5,7 @@ import ExperimentActions from './ExperimentActions';
 import { Link } from 'react-router-dom';
 import Button from '@mui/material/Button';
 import { jwtDecode } from 'jwt-decode';
+import CustomAlert from "../../../components/CustomAlert";
 
 const ExperimentList = () => {
     const [experiments, setExperiments] = useState([]);
@@ -23,10 +24,16 @@ const ExperimentList = () => {
 
     const userId = getUserIdFromToken();
 
+    const [alertOpen, setAlertOpen] = useState(false);
+    const [alertMessage, setAlertMessage] = useState('');
+    const [alertSeverity, setAlertSeverity] = useState('success');
+
     // Cargar data del server 
     useEffect(() => {
         if (!userId) {
-            alert('No se ha encontrado el usuario autenticado');
+            setAlertMessage("No se ha encontrado el usuario autenticado");
+            setAlertSeverity('error');
+            setAlertOpen(true);
             return;
         }
 
@@ -95,7 +102,7 @@ const ExperimentList = () => {
     ];
 
     return (
-        
+        <>
             <DataGrid
                 rows={rows}
                 columns={columns}
@@ -106,6 +113,16 @@ const ExperimentList = () => {
                 }}
                 pageSizeOptions={[5, 10]}
             />
+        
+            <CustomAlert 
+                open={alertOpen} 
+                onClose={() => setAlertOpen(false)} 
+                message={alertMessage} 
+                severity={alertSeverity} 
+            />
+        </>
+
+            
 
     )
 

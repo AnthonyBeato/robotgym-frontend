@@ -2,6 +2,7 @@ import axiosInstance from '../../../instance/axiosIntance';
 import { useEffect, useState } from "react"
 import { useParams, useNavigate } from 'react-router-dom';
 import RobotForm from "./RobotForm"
+import CustomAlert from "../../../components/CustomAlert";
 
 const EditRobot = () => {
     const [formValues, setFormValues] = useState(
@@ -17,6 +18,10 @@ const EditRobot = () => {
     const apiUrl = import.meta.env.VITE_HOST;
 
     const token = localStorage.getItem('token');
+
+    const [alertOpen, setAlertOpen] = useState(false);
+    const [alertMessage, setAlertMessage] = useState('');
+    const [alertSeverity, setAlertSeverity] = useState('success');
 
     // onSubmit handler
     const onSubmit = (robotObject) => {
@@ -36,12 +41,20 @@ const EditRobot = () => {
         )
             .then((res) => {
                 if (res.status === 200) {
-                    alert('Robot editado exitosamente');
-                    navigate("/robots");
+                    setAlertMessage('Robot editado exitosamente');
+                    setAlertSeverity('success');
+                    setAlertOpen(true);
+                    setTimeout(() => {
+                        navigate("/robots");
+                    }, 1500);
                 } else
                     Promise.reject()
             })
-            .catch((error) => alert("Algo ha salido mal: " + error.message));
+            .catch((error) => {
+                setAlertMessage("Algo ha salido mal: " + error.message);
+                setAlertSeverity('error');
+                setAlertOpen(true);
+            });
     }
 
     // Cargar data del server y reinicializar el form de student
@@ -74,12 +87,21 @@ const EditRobot = () => {
     }, [apiUrl, id, token]);
 
     return (
-        <RobotForm
-            initialValues={formValues}
-            onSubmit={onSubmit}
-        >
-            Editar Robot
-        </RobotForm>
+        <>
+            <RobotForm
+                initialValues={formValues}
+                onSubmit={onSubmit}
+            >
+                Editar Robot
+            </RobotForm>
+            
+            <CustomAlert 
+                open={alertOpen} 
+                onClose={() => setAlertOpen(false)} 
+                message={alertMessage} 
+                severity={alertSeverity} 
+            />
+        </>
     )
 
 }

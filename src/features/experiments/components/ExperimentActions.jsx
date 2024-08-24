@@ -1,4 +1,4 @@
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate} from 'react-router-dom';
 import Button from '@mui/material/Button';
 import axiosInstance from '../../../instance/axiosIntance';
 import { jwtDecode } from 'jwt-decode';
@@ -10,6 +10,8 @@ import DialogTitle from '@mui/material/DialogTitle';
 import Slide from '@mui/material/Slide';
 import PropTypes from 'prop-types'; // ES6
 import QueuePositionModal from '../../queue/QueuePositionModal';
+import CustomAlert from "../../../components/CustomAlert";
+import { useState } from "react"
 
 
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -24,6 +26,10 @@ const ExperimentActions = ({ experimentId, experimentName, isActive, onDelete })
     const [openConfirm, setOpenConfirm] = React.useState(false);
     const [openQueueModal, setOpenQueueModal] = React.useState(false);
 
+    const [alertOpen, setAlertOpen] = useState(false);
+    const [alertMessage, setAlertMessage] = useState('');
+    const [alertSeverity, setAlertSeverity] = useState('success');
+
 
     const handleClickOpenConfirm = () => {
       setOpenConfirm(true);
@@ -35,7 +41,7 @@ const ExperimentActions = ({ experimentId, experimentName, isActive, onDelete })
 
     const handleOpenQueueModal = () => {
         setOpenQueueModal(true);
-        handleCloseConfirm(); // Cierra el modal de confirmación al abrir el modal de cola
+        handleCloseConfirm();
     };
 
     const handleCloseQueueModal = () => {
@@ -56,7 +62,9 @@ const ExperimentActions = ({ experimentId, experimentName, isActive, onDelete })
     const userId = getUserIdFromToken();
 
     if (!userId) {
-        alert('No se ha encontrado el usuario autenticado');
+        setAlertMessage("No se ha encontrado el usuario autenticado");
+        setAlertSeverity('error');
+        setAlertOpen(true);
         return;
     }
 
@@ -78,7 +86,11 @@ const ExperimentActions = ({ experimentId, experimentName, isActive, onDelete })
                 Promise.reject();
             }
         })
-        .catch((error) => alert("Algo ha salido mal: " + error.message));
+        .catch((error) => {
+            setAlertMessage("Algo ha salido mal: " + error.message);
+            setAlertSeverity('error');
+            setAlertOpen(true);
+        });
     };
 
     // Verifica la posición en la cola y, si es el turno del usuario, inicia el experimento
@@ -120,7 +132,11 @@ const ExperimentActions = ({ experimentId, experimentName, isActive, onDelete })
                     Promise.reject();
                 }
             })
-            .catch((error) => alert("Algo ha salido mal: " + error.message));
+            .catch((error) => {
+                setAlertMessage("Algo ha salido mal: " + error.message);
+                setAlertSeverity('error');
+                setAlertOpen(true);
+            });
     }
 
     // Borrar un experimento
@@ -132,13 +148,19 @@ const ExperimentActions = ({ experimentId, experimentName, isActive, onDelete })
         })
             .then((res) => {
                 if (res.status === 200) {
-                    alert("Experimento borrado satisfactoriamente");
+                    setAlertMessage('Experimento borrado exitosamente');
+                    setAlertSeverity('success');
+                    setAlertOpen(true);
                     onDelete(experimentId);
                 } else {
                     Promise.reject();
                 }
             })
-            .catch((error) => alert("Algo ha salido mal: " + error.message));
+            .catch((error) => {
+                setAlertMessage("Algo ha salido mal: " + error.message);
+                setAlertSeverity('error');
+                setAlertOpen(true);
+            });
     }
 
 
@@ -207,6 +229,12 @@ const ExperimentActions = ({ experimentId, experimentName, isActive, onDelete })
             >
                 Eliminar
             </Button>
+            <CustomAlert 
+                open={alertOpen} 
+                onClose={() => setAlertOpen(false)} 
+                message={alertMessage} 
+                severity={alertSeverity} 
+            />
         </div>
     );
 }
