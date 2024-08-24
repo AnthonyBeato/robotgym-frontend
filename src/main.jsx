@@ -24,6 +24,7 @@ import { AuthProvider } from './context/AuthContext.jsx'
 import RobotPage from './routes/robotPage.jsx'
 import CreateRobotPage from './routes/robotCreatePage.jsx'
 import EditRobotPage from './routes/robotEditPage.jsx'
+import ProtectedRoute from './routes/ProtectedRoute.jsx'
 
 const router = createBrowserRouter([
   {
@@ -53,27 +54,27 @@ const router = createBrowserRouter([
       },
       {
         path: "admin/robots",
-        element: <RobotPage />,
+        element: <ProtectedRoute element={<RobotPage />} allowedRoles={['Administrador']} />,
       },
       {
         path: "admin/robots/create-robot",
-        element: <CreateRobotPage />,
+        element: <ProtectedRoute element={<CreateRobotPage />} allowedRoles={['Administrador']} />,
       },
       {
         path: "admin/robots/edit-robot/:id",
-        element: <EditRobotPage />,
+        element: <ProtectedRoute element={<EditRobotPage />} allowedRoles={['Administrador']} />,
       },
       {
         path: "admin/users",
-        element: <UserPage />,
+        element: <ProtectedRoute element={<UserPage />} allowedRoles={['Administrador']} />,
       },
       {
         path: "admin/users/create-user",
-        element: <CreateUserPage  />,
+        element: <ProtectedRoute element={<CreateUserPage />} allowedRoles={['Administrador']} />,
       },
       {
         path: "admin/users/edit-user/:id",
-        element: <EditUserPage />,
+        element: <ProtectedRoute element={<EditUserPage />} allowedRoles={['Administrador']} />,
       },
       {
         path: "users/login",

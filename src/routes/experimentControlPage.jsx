@@ -9,12 +9,12 @@ import Button from '@mui/material/Button';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
 import { Navigate, useParams } from 'react-router-dom';
-import { CameraAlt, FiberManualRecord } from '@mui/icons-material';
+// import { CameraAlt, FiberManualRecord } from '@mui/icons-material';
 import PropTypes from 'prop-types'; // ES6
 import ControlTabs from '../features/experiments/components/ControlTabs';
 import StopIcon from '@mui/icons-material/Stop';
 import CustomAlert from '../components/CustomAlert';
-
+import CountdownTimer from '../features/experiments/components/CountdownTimer';
 
 const BumperIndicator = ({ active }) => {
     const color = active ? 'red' : 'grey';
@@ -52,7 +52,7 @@ function ExperimentControlPage() {
     const [alertOpen, setAlertOpen] = useState(false);
     const [alertMessage, setAlertMessage] = useState('');
     const [alertSeverity, setAlertSeverity] = useState('success');
-
+    const [endTime, setEndTime] = useState('');
 
     // const maxReconnectAttempts = 10;
 
@@ -181,9 +181,11 @@ function ExperimentControlPage() {
         )
             .then((res) => {
                 const {
-                    name
+                    name,
+                    startTime,
                 } = res.data;
                 setExperimentTitle(name);
+                setEndTime(new Date(startTime).getTime() + 2 * 60 * 60 * 1000);
             })
             .catch(err => console.log(err)
             );
@@ -207,10 +209,10 @@ function ExperimentControlPage() {
     
     
 
-    const takePhoto = () => {
-        const cameraUrl = import.meta.env.VITE_CAMERA_HOST; 
-        window.location.href = `${cameraUrl}/capture_photo`; // Redirigir al endpoint para tomar la foto
-    };
+    // const takePhoto = () => {
+    //     const cameraUrl = import.meta.env.VITE_CAMERA_HOST; 
+    //     window.location.href = `${cameraUrl}/capture_photo`; 
+    // };
 
     if (loading) {
         return null;
@@ -225,13 +227,20 @@ function ExperimentControlPage() {
             <ExperimentPageStructure>
                 <Grid container spacing={2}>
                     <Grid container xs={12} md={12} sx={{alignItems: 'center', justifyContent: 'space-between'}} >
-                        <Grid >
+                        <Grid xs={6} sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
                             <h1>{experimentTitle}</h1>
                         </Grid>
-                        <Grid>
-                            <Button variant="text" color="primary" onClick={stopExperiment}>
-                                <StopIcon /> Detener experimento
-                            </Button>
+                        <Grid sx={{ display: 'flex', justifyContent: 'flex-end', gap: 4 }}>
+                            <Grid sx={{ textAlign: 'right' }}>
+                                <span>Tiempo disponible:</span>
+                                <CountdownTimer endTime={endTime} />
+                            </Grid>
+                            <Grid xs={6} >
+                                <Button variant="outlined" color="primary" onClick={stopExperiment}>
+                                    <StopIcon /> Detener experimento
+                                </Button>
+
+                            </Grid>
                         </Grid>
                     </Grid>
                     <Grid md={8} sx={{border: 0}}>
@@ -246,7 +255,7 @@ function ExperimentControlPage() {
                            />
                         </Box>
                         <Grid container spacing={2} style={{marginTop: 10}} >
-                            <Grid>
+                            {/* <Grid>
                                 <Button variant="outlined" color='primary' onClick={takePhoto}>
                                     <CameraAlt style={{paddingRight: 2}}/> Tomar Foto
                                 </Button>
@@ -255,7 +264,7 @@ function ExperimentControlPage() {
                                 <Button variant="outlined" color='primary' >
                                    <FiberManualRecord style={{paddingRight: 2}}/> Grabar
                                 </Button>
-                            </Grid>
+                            </Grid> */}
                         </Grid>
                     </Grid>
                     <Grid md={4} sx={{border: 0}}>

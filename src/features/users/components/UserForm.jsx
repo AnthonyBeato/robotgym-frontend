@@ -13,28 +13,35 @@ import Select from '@mui/material/Select';
 import { useEffect, useRef} from "react";
 import PropTypes from 'prop-types'; // ES6
 
-const validationSchema = yup.object({
-    fullName: yup
-        .string('Entra el nombre completo')
-        .required("Requerido"),
-    username: yup
-        .string('Entra el username')
-        .required("Requerido"),
-    email: yup
-        .string('Entra el email')
-        .required("Requerido"),
-    password: yup
-        .string('Entra la contraseña')
-        .required("Requerido"),
-    role: yup
-        .string('Entra el rol')
-        .required("Requerido"),
-    aprobationStatus: yup
-        .string('Entra el status de aprobación')
-        .required("Requerido"),
-});
 
 const UserForm = (props) => {
+    const validationSchema = yup.object({
+        fullName: yup
+            .string('Entra el nombre completo')
+            .required("Requerido"),
+        username: yup
+            .string('Entra el username')
+            .required("Requerido"),
+        email: yup
+            .string('Entra el email')
+            .required("Requerido"),
+        password: props.isRegistering ? yup
+            .string('Entra la contraseña')
+            .required("Requerido")
+            : yup.string('Entra la contraseña'),
+        confirmPassword: props.isRegistering ? yup
+            .string('Confirma la contraseña')
+            .oneOf([yup.ref('password'), null], 'Las contraseñas deben coincidir')
+            .required("Requerido")
+            : yup.string('Confirma la contraseña'),
+        role: yup
+            .string('Entra el rol')
+            .required("Requerido"),
+        aprobationStatus: yup
+            .string('Entra el status de aprobación')
+            .required("Requerido"),
+    });
+
     const formik = useFormik({
         initialValues: props.initialValues,
         validationSchema: validationSchema,
@@ -111,23 +118,43 @@ const UserForm = (props) => {
                             variant="filled"
                         />
                     </Grid>
-                    {!props.isEditing ? null : (
-                        <Grid xs={12}>
-                            <TextField
-                                id="txt-user-password"
-                                name="password"
-                                placeholder='Contraseña'
-                                value={formik.values.password}
-                                onChange={formik.handleChange}
-                                onBlur={formik.handleBlur}
-                                error={formik.touched.password && Boolean(formik.errors.password)}
-                                helperText={formik.touched.password && formik.errors.password}
-                                fullWidth
-                                type="password"
-                                size='small'
-                                variant="filled"
-                            />
-                        </Grid>
+                    {(props.isRegistering || props.isEditing) || (!props.isRegistering) && (
+                        <>
+                            <Grid xs={6}>
+                                <TextField
+                                    id="txt-user-password"
+                                    name="password"
+                                    placeholder='Contraseña'
+                                    value={formik.values.password}
+                                    onChange={formik.handleChange}
+                                    onBlur={formik.handleBlur}
+                                    error={formik.touched.password && Boolean(formik.errors.password)}
+                                    helperText={formik.touched.password && formik.errors.password}
+                                    fullWidth
+                                    type="password"
+                                    size='small'
+                                    variant="filled"
+                                />
+                            </Grid>
+                            {props.isRegistering && (
+                                <Grid xs={6}>
+                                    <TextField
+                                        id="txt-confirm-password"
+                                        name="confirmPassword"
+                                        placeholder='Confirma la contraseña'
+                                        value={formik.values.confirmPassword}
+                                        onChange={formik.handleChange}
+                                        onBlur={formik.handleBlur}
+                                        error={formik.touched.confirmPassword && Boolean(formik.errors.confirmPassword)}
+                                        helperText={formik.touched.confirmPassword && formik.errors.confirmPassword}
+                                        fullWidth
+                                        type="password"
+                                        size='small'
+                                        variant="filled"
+                                    />
+                                </Grid>
+                            )}
+                        </>
                     )}
                     <Grid xs={3}>
                         <FormControl>
@@ -153,7 +180,7 @@ const UserForm = (props) => {
 
                     </Grid>
 
-                    {props.isRegistering ? null : (
+                    {!props.isRegistering && (
                         <Grid xs={3} >
                         <FormControl>
                             <InputLabel id="select-status-label">Status</InputLabel>
