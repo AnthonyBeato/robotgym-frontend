@@ -47,7 +47,7 @@ const RobotActions = ({ robotId, onDelete }) => {
                 color="info"
                 style={{ marginLeft: '10px' }}
                 component={Link}
-                to={`/robots/edit-robot/${robotId}`}
+                to={`/admin/robots/edit-robot/${robotId}`}
             >
                 Editar
             </Button>

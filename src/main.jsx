@@ -52,15 +52,15 @@ const router = createBrowserRouter([
         element: <ExperimentControlPage />
       },
       {
-        path: "robots",
+        path: "admin/robots",
         element: <RobotPage />,
       },
       {
-        path: "robots/create-robot",
+        path: "admin/robots/create-robot",
         element: <CreateRobotPage />,
       },
       {
-        path: "robots/edit-robot/:id",
+        path: "admin/robots/edit-robot/:id",
         element: <EditRobotPage />,
       },
       {

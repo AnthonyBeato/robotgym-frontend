@@ -45,7 +45,7 @@ const EditRobot = () => {
                     setAlertSeverity('success');
                     setAlertOpen(true);
                     setTimeout(() => {
-                        navigate("/robots");
+                        navigate("/admin/robots");
                     }, 1500);
                 } else
                     Promise.reject()

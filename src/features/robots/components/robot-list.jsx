@@ -56,7 +56,7 @@ const RobotList = () => {
             renderCell: (params) => (
                 <Button 
                     component={Link}
-                    to={`/robots/${params.row.id}`}
+                    to={`/admin/robots/${params.row.id}`}
                 >{params.row.model}</Button>
         )},
         { field: 'statusUse', headerName: 'Estado', width: 200 },

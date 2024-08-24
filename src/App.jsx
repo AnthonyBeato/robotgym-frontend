@@ -8,11 +8,13 @@ import getLPTheme from './theme/getLPTheme';
 import { Outlet } from "react-router-dom";
 
 function App() {
-  const [mode, setMode] = React.useState('light');
+  const [mode, setMode] = React.useState(localStorage.getItem('themeMode') || 'light');
   const LPtheme = createTheme(getLPTheme(mode));
 
   const toggleColorMode = () => {
-    setMode((prev) => (prev === 'dark' ? 'light' : 'dark'));
+    const newMode = mode === 'dark' ? 'light' : 'dark';
+    setMode(newMode);
+    localStorage.setItem('themeMode', newMode); 
   };
 
   return (

@@ -37,7 +37,7 @@ function RobotPage() {
                             variant="contained"
                             color="primary"
                             component={Link}
-                            to="/robots/create-robot"
+                            to="/admin/robots/create-robot"
                         >
                             Crear
                         </Button>

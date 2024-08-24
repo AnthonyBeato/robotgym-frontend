@@ -146,7 +146,7 @@ function AppAppBar({ mode, toggleColorMode }) {
                 component={Link}
                 to="/documentation"
               >
-                Documentación
+                Guía de Uso
               </Button>
               <Button
                 variant="text"
@@ -171,7 +171,7 @@ function AppAppBar({ mode, toggleColorMode }) {
                 color="info"
                 size="small"
                 component={Link}
-                to="/robots"
+                to="/admin/robots"
               >
                 Robots
               </Button>
