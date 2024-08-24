@@ -1,6 +1,5 @@
-import axios from "axios"
 import { useState } from "react"
-
+import axiosInstance from '../../../instance/axiosIntance';
 import ExperimentForm from "./ExperimentForm"
 import { jwtDecode } from 'jwt-decode';
 
@@ -44,7 +43,7 @@ const CreateExperiment = () => {
 
         const token = localStorage.getItem('token');
 
-        axios.post(apiUrl + '/experiments/create-experiment', newExperiment, {
+        axiosInstance.post(apiUrl + '/experiments/create-experiment', newExperiment, {
             headers: {
                 'Authorization': `Bearer ${token}`
             }

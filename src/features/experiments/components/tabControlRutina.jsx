@@ -3,7 +3,7 @@ import { useState } from "react";
 import Button from '@mui/material/Button';
 import { PlayArrow } from "@mui/icons-material";
 import Grid from '@mui/material/Unstable_Grid2';
-import axios from 'axios';
+import axiosInstance from "../../../instance/axiosIntance";
 import PropTypes from 'prop-types'; // ES6
 import {  useContext} from 'react';
 import { AuthContext } from "../../../context/AuthContext";
@@ -24,7 +24,7 @@ export default function TabControlRoutine({experimentId}) {
         const apiUrl = import.meta.env.VITE_HOST;
         
         // Subir el archivo al backend
-        const uploadResponse = await axios.post(`${apiUrl}/routines/upload`, formData, {
+        const uploadResponse = await axiosInstance.post(`${apiUrl}/routines/upload`, formData, {
           headers: {
             'Content-Type': 'multipart/form-data',
             'Authorization': `Bearer ${token}`  
@@ -37,7 +37,7 @@ export default function TabControlRoutine({experimentId}) {
           // Luego de la subida exitosa, ejecutar la rutina
           const routineId = uploadResponse.data.routine._id;  
           
-          const runResponse = await axios.post(`${apiUrl}/routines/run/${routineId}`, {}, {
+          const runResponse = await axiosInstance.post(`${apiUrl}/routines/run/${routineId}`, {}, {
             headers: {
               'Authorization': `Bearer ${token}` 
             },

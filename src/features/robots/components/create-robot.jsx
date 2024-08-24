@@ -1,4 +1,4 @@
-import axios from "axios"
+import axiosInstance from '../../../instance/axiosIntance';
 import { useState } from "react"
 
 import RobotForm from "./RobotForm"
@@ -27,7 +27,7 @@ const CreateRobot = () => {
 
         const token = localStorage.getItem('token');
 
-        axios.post(apiUrl + '/robots/create-robot', newRobot, {
+        axiosInstance.post(apiUrl + '/robots/create-robot', newRobot, {
             headers: {
                 'Authorization': `Bearer ${token}`
             }

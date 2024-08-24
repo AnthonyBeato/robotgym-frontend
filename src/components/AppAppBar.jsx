@@ -18,14 +18,17 @@ import ToggleColorMode from './ToggleColorMode';
 import RobotGym from './RobotGymIcon';
 
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom"
 
 import { AuthContext } from '../context/AuthContext';
 import { jwtDecode } from 'jwt-decode';
+import axiosInstance from '../instance/axiosIntance';
 
 function AppAppBar({ mode, toggleColorMode }) {
   const [open, setOpen] = React.useState(false);
   const [anchorEl, setAnchorEl] = React.useState(null);
   const { token, setToken } = useContext(AuthContext);
+  const navigate = useNavigate();
 
 
   const toggleDrawer = (newOpen) => () => {
@@ -47,9 +50,20 @@ function AppAppBar({ mode, toggleColorMode }) {
   };
 
   const handleLogout = () => {
-    setToken(null);
-    localStorage.removeItem("token");
-    handleCloseMenu();
+    const apiUrl = import.meta.env.VITE_HOST;
+
+    axiosInstance.post(`${apiUrl}/logout`, { token })
+        .then(() => {
+            setToken(null);
+            localStorage.removeItem("token");
+            localStorage.removeItem("refreshToken");
+            handleCloseMenu();
+            navigate("/users/login");
+        })
+        .catch((error) => {
+            console.error("Error logging out: ", error);
+            alert("Error al cerrar sesión");
+        });
   };
 
   const handleOpenMenu = (event) => {
@@ -63,8 +77,10 @@ function AppAppBar({ mode, toggleColorMode }) {
   let username = '';
   if (token) {
     const decodedToken = jwtDecode(token);
-    username = decodedToken.username;
-  }
+    console.log("Decoded Token:", decodedToken); // Verifica qué campos están presentes
+    username = decodedToken.username || ''; // Asegúrate de que el campo username exista
+}
+
 
   return (
     <AppBar

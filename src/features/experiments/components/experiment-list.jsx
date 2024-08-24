@@ -1,4 +1,4 @@
-import axios from "axios"
+import axiosInstance from '../../../instance/axiosIntance';
 import { useEffect, useState } from "react"
 import { DataGrid } from '@mui/x-data-grid';
 import ExperimentActions from './ExperimentActions';
@@ -39,7 +39,7 @@ const ExperimentList = () => {
             }
 
             try {
-                const { data } = await axios.get(apiUrl + '/experiments/user/' + userId, {
+                const { data } = await axiosInstance.get(apiUrl + '/experiments/user/' + userId, {
                     headers: {
                         'Authorization': `Bearer ${token}` 
                     }

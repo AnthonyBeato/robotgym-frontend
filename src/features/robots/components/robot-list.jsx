@@ -1,4 +1,4 @@
-import axios from "axios"
+import axiosInstance from '../../../instance/axiosIntance';
 import { useEffect, useState } from "react"
 import { DataGrid } from '@mui/x-data-grid';
 import RobotActions from './RobotActions';
@@ -23,7 +23,7 @@ const RobotList = () => {
             }
 
             try {
-                const { data } = await axios.get(apiUrl + '/robots/', {
+                const { data } = await axiosInstance.get(apiUrl + '/robots/', {
                     headers: {
                         'Authorization': `Bearer ${token}` 
                     }

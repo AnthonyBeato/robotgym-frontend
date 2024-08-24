@@ -1,4 +1,4 @@
-import axios from "axios"
+import axiosInstance from '../../../instance/axiosIntance';
 import { useState } from "react"
 
 import UserForm from "./UserForm"
@@ -33,7 +33,7 @@ const CreateUser = (props) => {
             aprobationStatus: userObject.aprobationStatus,
         };
 
-        axios.post(
+        axiosInstance.post(
             apiUrl + '/users/create-user',
             newUser, {
                 headers: {

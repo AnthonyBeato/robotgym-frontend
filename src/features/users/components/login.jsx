@@ -4,7 +4,7 @@ import { useFormik } from 'formik';
 import { TextField } from '@mui/material';
 import Button from '@mui/material/Button';
 import Grid from '@mui/material/Unstable_Grid2';
-import axios from "axios"
+import axiosInstance from '../../../instance/axiosIntance';
 import {useState } from "react"
 
 import { useNavigate } from "react-router-dom"
@@ -39,18 +39,20 @@ const Login = () => {
             password: userObject.password,
         };
 
-        axios.post( apiUrl + '/users/login', user)
+        axiosInstance.post( apiUrl + '/users/login', user)
             .then((res) => {
                 if (res.status === 200) {
                     alert('Usuario logueado exitosamente');
-                    setToken(res.data.token);
-                    localStorage.setItem("token", res.data.token);
+                    setToken(res.data.accessToken);
+                    localStorage.setItem("token", res.data.accessToken);
+                    localStorage.setItem("refreshToken", res.data.refreshToken); 
                     navigate("/experiments");
                 }
                 else {
                     Promise.reject()
                     setToken(null);
                     localStorage.removeItem("token");
+                    localStorage.removeItem("refreshToken");
                 }
             })
             .catch((error) => alert("Algo ha salido mal: " + error.message));

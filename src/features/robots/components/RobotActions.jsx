@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import Button from '@mui/material/Button';
-import axios from 'axios';
+import axiosInstance from '../../../instance/axiosIntance';
 import PropTypes from 'prop-types'; // ES6
 
 
@@ -12,7 +12,7 @@ const RobotActions = ({ robotId, onDelete }) => {
 
     // Borrar un experimento
     const deleteRobot = () => {
-        axios.delete(apiUrl + '/robots/delete-robot/' + robotId, {
+        axiosInstance.delete(apiUrl + '/robots/delete-robot/' + robotId, {
             headers: {
                 'Authorization': `Bearer ${token}` 
             }

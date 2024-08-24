@@ -1,5 +1,5 @@
 import { useState, useEffect, useContext } from 'react';
-import axios from 'axios';
+import axiosInstance from '../instance/axiosIntance';
 import Box from '@mui/material/Box';
 import Divider from '@mui/material/Divider';
 import Footer from '../components/Footer';
@@ -140,7 +140,7 @@ function ExperimentControlPage() {
 
     const stopExperiment = () => {
         const apiUrl = import.meta.env.VITE_HOST;
-        axios.post(`${apiUrl}/experiments/stop-experiment/${experimentId}`, {}, {
+        axiosInstance.post(`${apiUrl}/experiments/stop-experiment/${experimentId}`, {}, {
             headers: {
                 'Authorization': `Bearer ${token}`
             }
@@ -159,7 +159,7 @@ function ExperimentControlPage() {
 
     useEffect(() => {
         const apiUrl = import.meta.env.VITE_HOST;
-        axios.get(
+        axiosInstance.get(
             apiUrl + '/experiments/' + experimentId, {
                 headers: {
                     'Authorization': `Bearer ${token}` 
@@ -178,7 +178,7 @@ function ExperimentControlPage() {
 
     useEffect(() => {
         const apiUrl = import.meta.env.VITE_HOST;
-        axios.get(
+        axiosInstance.get(
             `${apiUrl}/experiments/${experimentId}/robots`, {
                 headers: {
                     'Authorization': `Bearer ${token}`

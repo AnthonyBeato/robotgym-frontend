@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Dialog, DialogTitle, DialogContent, DialogActions, Typography, Button } from '@mui/material';
-import axios from 'axios';
+import axiosInstance from '../../instance/axiosIntance';
 import { jwtDecode } from 'jwt-decode';
 import PropTypes from 'prop-types'; // ES6
 
@@ -31,7 +31,7 @@ const QueuePositionModal = ({ open, onClose, experimentId }) => {
             const fetchQueuePosition = async () => {
                 const token = localStorage.getItem('token');
                 try {
-                    const response = await axios.get(`${apiUrl}/queue/first`, {
+                    const response = await axiosInstance.get(`${apiUrl}/queue/first`, {
                         headers: {
                             'Authorization': `Bearer ${token}`
                         }

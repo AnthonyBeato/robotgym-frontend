@@ -1,4 +1,4 @@
-import axios from "axios"
+import axiosInstance from '../../../instance/axiosIntance';
 import { useEffect, useState } from "react"
 import { DataGrid } from '@mui/x-data-grid';
 import UsersActions from "./UserActions";
@@ -10,7 +10,7 @@ const UserList = () => {
     
     // Cargar data del server y reinicializar el form de student
     useEffect(() => {
-        axios.get(
+        axiosInstance.get(
             apiUrl + '/users/')
             .then(({ data }) => {
                 setUsers(Array.isArray(data) ? data : []);

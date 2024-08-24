@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import Button from '@mui/material/Button';
-import axios from 'axios';
+import axiosInstance from '../../../instance/axiosIntance';
 import PropTypes from 'prop-types'; // ES6
 
 const UsersActions = ({ userId, onDelete }) => {
@@ -10,7 +10,7 @@ const UsersActions = ({ userId, onDelete }) => {
     const token = localStorage.getItem('token');
 
     const deleteUser = () => {
-        axios.delete(apiUrl + '/users/delete-user/' + userId, {
+        axiosInstance.delete(apiUrl + '/users/delete-user/' + userId, {
             headers: {
                 'Authorization': `Bearer ${token}` 
             }

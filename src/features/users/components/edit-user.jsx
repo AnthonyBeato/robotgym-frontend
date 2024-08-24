@@ -1,4 +1,4 @@
-import axios from "axios"
+import axiosInstance from '../../../instance/axiosIntance';
 import { useEffect, useState } from "react"
 import { useParams, useNavigate } from 'react-router-dom';
 import UserForm from "./UserForm"
@@ -29,7 +29,7 @@ const EditUser = () => {
             aprobationStatus: userObject.aprobationStatus,
         }
 
-        axios.put(
+        axiosInstance.put(
             apiUrl + '/users/update-user/' + id, updatedUser, {
                 headers: {
                     'Authorization': `Bearer ${token}` 
@@ -49,7 +49,7 @@ const EditUser = () => {
     
     // Cargar data del server y reinicializar el form de student
     useEffect(() => {
-        axios.get(
+        axiosInstance.get(
             apiUrl + '/users/' + id, {
                 headers: {
                     'Authorization': `Bearer ${token}` 

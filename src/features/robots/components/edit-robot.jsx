@@ -1,4 +1,4 @@
-import axios from "axios"
+import axiosInstance from '../../../instance/axiosIntance';
 import { useEffect, useState } from "react"
 import { useParams, useNavigate } from 'react-router-dom';
 import RobotForm from "./RobotForm"
@@ -27,7 +27,7 @@ const EditRobot = () => {
             hostname: robotObject.hostname,
         }
 
-        axios.put(
+        axiosInstance.put(
             apiUrl + '/robots/update-robot/' + id, updatedRobot, {
                 headers: {
                     'Authorization': `Bearer ${token}` 
@@ -46,7 +46,7 @@ const EditRobot = () => {
 
     // Cargar data del server y reinicializar el form de student
     useEffect(() => {
-        axios.get(
+        axiosInstance.get(
             apiUrl + '/robots/' + id, {
                 headers: {
                     'Authorization': `Bearer ${token}` 

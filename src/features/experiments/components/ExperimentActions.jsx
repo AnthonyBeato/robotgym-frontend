@@ -1,6 +1,6 @@
 import { Link, useNavigate } from 'react-router-dom';
 import Button from '@mui/material/Button';
-import axios from 'axios';
+import axiosInstance from '../../../instance/axiosIntance';
 import { jwtDecode } from 'jwt-decode';
 
 import React from 'react';
@@ -62,7 +62,7 @@ const ExperimentActions = ({ experimentId, experimentName, isActive, onDelete })
 
     // Función intermedia para agregar el experimento a la cola y verificar su posición
     const addToQueueAndStart = () => {
-        axios.post(`${apiUrl}/queue/add`, { experimentId }, {
+        axiosInstance.post(`${apiUrl}/queue/add`, { experimentId }, {
             headers: {
                 'Authorization': `Bearer ${token}`
             }
@@ -85,7 +85,7 @@ const ExperimentActions = ({ experimentId, experimentName, isActive, onDelete })
     const checkQueuePositionAndStartExperiment = () => {
         const fetchQueuePosition = async () => {
             try {
-                const response = await axios.get(`${apiUrl}/queue/first`, {
+                const response = await axiosInstance.get(`${apiUrl}/queue/first`, {
                     headers: {
                         'Authorization': `Bearer ${token}`
                     }
@@ -105,7 +105,7 @@ const ExperimentActions = ({ experimentId, experimentName, isActive, onDelete })
 
     // Iniciar un experimento 
     const startExperiment = () => {
-        axios.post(apiUrl + '/experiments/start-experiment/' + experimentId, {}, {
+        axiosInstance.post(apiUrl + '/experiments/start-experiment/' + experimentId, {}, {
             headers: {
                 'Authorization': `Bearer ${token}` 
             }
@@ -125,7 +125,7 @@ const ExperimentActions = ({ experimentId, experimentName, isActive, onDelete })
 
     // Borrar un experimento
     const deleteExperiment = () => {
-        axios.delete(apiUrl + '/experiments/delete-experiment/' + experimentId, {
+        axiosInstance.delete(apiUrl + '/experiments/delete-experiment/' + experimentId, {
             headers: {
                 'Authorization': `Bearer ${token}` 
             }
@@ -144,7 +144,7 @@ const ExperimentActions = ({ experimentId, experimentName, isActive, onDelete })
 
     //  Retomar un experimento no desactivado
     const retakeExperiment = () => {
-        axios.post(apiUrl + '/experiments/' + experimentId + '/control', {
+        axiosInstance.post(apiUrl + '/experiments/' + experimentId + '/control', {
             headers: {
                 'Authorization': `Bearer ${token}` 
             }

@@ -1,7 +1,7 @@
-import axios from "axios"
 import { useEffect, useState } from "react"
 import { useParams, useNavigate } from 'react-router-dom';
 import ExperimentForm from "./ExperimentForm"
+import axiosInstance from '../../../instance/axiosIntance';
 
 import { jwtDecode } from 'jwt-decode';
 
@@ -36,7 +36,7 @@ const EditExperiment = () => {
             return;
         }
 
-        axios.get(
+        axiosInstance.get(
             apiUrl + '/experiments/' + id, {
                 headers: {
                     'Authorization': `Bearer ${token}` 
@@ -67,7 +67,7 @@ const EditExperiment = () => {
             description: experimentObject.description,
         }
 
-        axios.put(
+        axiosInstance.put(
             apiUrl + '/experiments/update-experiment/' + id, updatedExperiment, {
                 headers: {
                     'Authorization': `Bearer ${token}` 

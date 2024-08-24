@@ -13,8 +13,13 @@ export const AuthProvider = ({ children }) => {
     setLoading(false); 
   }, []);
 
+  const updateToken = (newToken) => {
+    setToken(newToken);
+    localStorage.setItem('token', newToken);
+  };
+
   return (
-    <AuthContext.Provider value={{ token, setToken, loading }}>
+    <AuthContext.Provider value={{ token, setToken: updateToken, loading }}>
       {children}
     </AuthContext.Provider>
   );
