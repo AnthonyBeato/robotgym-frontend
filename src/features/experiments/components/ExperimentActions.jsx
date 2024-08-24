@@ -127,7 +127,9 @@ const ExperimentActions = ({ experimentId, experimentName, isActive, onDelete })
                 if (res.status === 200) {
                     // Iniciando experimento
                     // Redireccionar a la pantalla de experimento iniciado
-                    navigate(`/experiments/${experimentId}/control`);
+                    setTimeout(() => {
+                        navigate(`/experiments/${experimentId}/control`);
+                    }, 3000);
                 } else {
                     Promise.reject();
                 }
