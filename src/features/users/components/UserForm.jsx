@@ -118,7 +118,7 @@ const UserForm = (props) => {
                             variant="filled"
                         />
                     </Grid>
-                    {(props.isRegistering || props.isEditing) || (!props.isRegistering) && (
+                    {(props.isRegistering || props.isEditing) && (
                         <>
                             <Grid xs={6}>
                                 <TextField
