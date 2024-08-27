@@ -173,7 +173,6 @@ const UserForm = (props) => {
                             >
                                 <MenuItem value={"Estudiante"}>Estudiante</MenuItem>
                                 <MenuItem value={"Profesor"}>Profesor</MenuItem>
-                                <MenuItem value={"Administrador"}>Administrador</MenuItem>
                             </Select>
                             <FormHelperText>Rol de Usuario</FormHelperText>
                         </FormControl>
