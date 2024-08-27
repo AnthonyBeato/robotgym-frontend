@@ -7,7 +7,9 @@ const ProtectedRoute = ({ element, allowedRoles }) => {
     const { user } = useContext(AuthContext);
 
   
-    if (!user || !allowedRoles.includes(user.role)) {
+    if (!allowedRoles.includes(user.role)) {
+      return <Navigate to="/error-401" replace />;
+    } else if (!user){
       return <Navigate to="/users/login" replace />;
     }
   
@@ -15,7 +17,7 @@ const ProtectedRoute = ({ element, allowedRoles }) => {
   };
 
 ProtectedRoute.propTypes = {
-    element: PropTypes.string.isRequired,
+    element: PropTypes.object.isRequired,
     allowedRoles: PropTypes.array.isRequired,
 }
   

@@ -19,7 +19,7 @@ import HomePage from './routes/homePage.jsx'
 import LoginPage from './routes/loginPage.jsx'
 import RegisterPage from './routes/registerPage.jsx'
 import ExperimentControlPage from './routes/experimentControlPage.jsx'
-
+import Error401Page from './error-401-page.jsx'
 import { AuthProvider } from './context/AuthContext.jsx'
 import RobotPage from './routes/robotPage.jsx'
 import CreateRobotPage from './routes/robotCreatePage.jsx'
@@ -89,6 +89,10 @@ const router = createBrowserRouter([
       },
       {
         path: "contact"
+      },
+      {
+        path: "error-401",
+        element: <Error401Page />,
       },
     ]
   },

@@ -53,6 +53,7 @@ function ExperimentControlPage() {
     const [alertMessage, setAlertMessage] = useState('');
     const [alertSeverity, setAlertSeverity] = useState('success');
     const [endTime, setEndTime] = useState('');
+    const [experimentActivated, setExperimentActivated] = useState(true);
 
     // const maxReconnectAttempts = 10;
 
@@ -183,9 +184,11 @@ function ExperimentControlPage() {
                 const {
                     name,
                     startTime,
+                    isActive,
                 } = res.data;
                 setExperimentTitle(name);
                 setEndTime(new Date(startTime).getTime() + 2 * 60 * 60 * 1000);
+                setExperimentActivated(isActive)
             })
             .catch(err => console.log(err)
             );
@@ -220,6 +223,10 @@ function ExperimentControlPage() {
 
     if (!token) {
         return <Navigate to="/users/login" replace />;
+    }
+
+    if (!experimentActivated) {
+        return <Navigate to="/experiments" replace />;
     }
 
     return (

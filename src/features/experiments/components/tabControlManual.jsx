@@ -22,7 +22,7 @@ import PropTypes from 'prop-types';
 export default function TabControlManual({availableRobots}) {
 
     const [robotSelected, setRobotSelected] = useState('');
-    const [speed, setSpeed] = useState(0.5);  // Velocidad linear en 0.5
+    const [speed, setSpeed] = useState(0.1);  // Velocidad linear en 0.1
     const [angularSpeed, setAngularSpeed] = useState(1.0); // Velocidad angular inicial
     const [rosInstance, setRosInstance] = useState(null);
     const [publisher, setPublisher] = useState(null);
@@ -175,7 +175,7 @@ export default function TabControlManual({availableRobots}) {
             <Grid xs={12}>
                 <Grid container spacing={1} justifyContent={"center"}>
                     <Grid>
-                        <Button variant="outlined" onClick={() => sendCommand(0.5, 0.5)}>
+                        <Button variant="outlined" onClick={() => sendCommand(0.1, 0.1)}>
                             <NorthWestIcon />
                         </Button>
                     </Grid>
@@ -185,7 +185,7 @@ export default function TabControlManual({availableRobots}) {
                         </Button> 
                     </Grid>
                     <Grid>
-                        <Button variant="outlined" onClick={() => sendCommand(0.5, -0.5)}>
+                        <Button variant="outlined" onClick={() => sendCommand(0.1, -0.1)}>
                             <NorthEastIcon />
                         </Button>                  
                     </Grid>
@@ -213,7 +213,7 @@ export default function TabControlManual({availableRobots}) {
             <Grid  xs={12}>
                 <Grid container spacing={1} justifyContent={"center"}>
                     <Grid>
-                        <Button variant="outlined" onClick={() => sendCommand(-0.5, 0.5)}>
+                        <Button variant="outlined" onClick={() => sendCommand(-0.1, 0.1)}>
                             <SouthWestIcon />
                         </Button>
                     </Grid>
@@ -223,7 +223,7 @@ export default function TabControlManual({availableRobots}) {
                         </Button>
                     </Grid>
                     <Grid>            
-                        <Button variant="outlined" onClick={() => sendCommand(-0.5, -0.5)}>
+                        <Button variant="outlined" onClick={() => sendCommand(-0.1, -0.1)}>
                             <SouthEastIcon />
                         </Button>
                     </Grid>
